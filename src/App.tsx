@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { MessageCircle, ArrowUp } from 'lucide-react';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 import { Language } from './types';
 import Header from './components/Header';
 import FlagshipHomepage from './components/FlagshipHomepage';
@@ -102,6 +103,9 @@ export default function App() {
           <span>(631) 132-2616</span>
         </a>
       </div>
+
+      {/* Vercel Speed Insights */}
+      <SpeedInsights />
     </div>
   );
 }
