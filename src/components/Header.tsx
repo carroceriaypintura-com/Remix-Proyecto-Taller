@@ -40,7 +40,7 @@ export default function Header({ onOpenWorkspace }: HeaderProps) {
         {/* Contact and social links stay visible at every screen size. */}
         <nav
           aria-label="Contacto y redes sociales"
-          className="col-span-2 row-start-2 grid grid-cols-4 sm:flex sm:flex-wrap lg:flex-nowrap items-center gap-2 lg:gap-3 lg:ml-auto"
+          className="col-span-2 row-start-2 grid grid-cols-2 min-[360px]:grid-cols-4 sm:flex sm:flex-wrap lg:flex-nowrap items-center gap-2 lg:gap-3 lg:ml-auto"
         >
           <a
             href={BUSINESS_INFO.social.whatsapp}
@@ -83,7 +83,7 @@ export default function Header({ onOpenWorkspace }: HeaderProps) {
             className="inline-flex min-h-11 min-w-11 items-center justify-center gap-1 sm:gap-2 px-1.5 sm:px-3.5 py-2.5 rounded-full text-[10px] sm:text-sm font-semibold text-white bg-neutral-900 hover:bg-neutral-800 border border-white/20 transition-all shadow-md hover:scale-105"
           >
             <i className="fa-brands fa-x-twitter text-sm" aria-hidden="true"></i>
-            <span className="sm:sr-only">X</span>
+            <span className="sr-only">X</span>
           </a>
         </nav>
 

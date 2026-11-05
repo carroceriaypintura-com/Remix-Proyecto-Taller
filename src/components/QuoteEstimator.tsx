@@ -180,7 +180,7 @@ _Hola, envío mis datos para una valoración personalizada de mi auto en José Z
               <div className="flex items-center gap-2">
                 <label
                   htmlFor={photoInputId}
-                  className="cursor-pointer inline-flex items-center gap-2 px-4 py-3 bg-[#12141c] hover:bg-[#202430] border border-white/10 hover:border-amber-500/30 rounded-2xl text-xs font-semibold text-neutral-200 hover:text-white transition-all shadow-sm"
+                  className="action-pill action-purple"
                 >
                   <Upload className="w-4 h-4 text-amber-500" />
                   <span>{lang === 'es' ? 'Adjuntar Fotos del Auto' : 'Attach Vehicle Photos'}</span>
