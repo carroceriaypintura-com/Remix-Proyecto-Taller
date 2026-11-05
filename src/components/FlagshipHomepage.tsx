@@ -7,7 +7,7 @@ import {
   Phone,
   MessageCircle,
 } from 'lucide-react';
-import { BUSINESS_INFO } from '../data/content';
+import { BUSINESS_INFO, REAL_WORK_PHOTOS } from '../data/content';
 
 export default function FlagshipHomepage() {
   const [selectedPhoto, setSelectedPhoto] = useState<{
@@ -35,27 +35,12 @@ export default function FlagshipHomepage() {
       <div className="absolute top-[800px] left-0 w-[400px] h-[400px] bg-neutral-800/20 rounded-full blur-[120px] pointer-events-none" />
 
       {/* ========================================================
-          1. HERO SECTION: Black High-Gloss Sports Car & Bold Serif Typography
+          1. HERO SECTION: Original workshop photograph & typography
           ======================================================== */}
-      <section className="relative min-h-[640px] sm:min-h-[720px] lg:min-h-[760px] flex items-center pt-8 sm:pt-14 pb-16 border-b border-white/10">
+      <section className="relative pt-8 sm:pt-14 pb-12 border-b border-white/10">
         
-        {/* Right Side: High-Gloss Carbon Fiber Sports Car */}
-        <div className="absolute right-0 top-0 bottom-0 w-full lg:w-[62%] pointer-events-none overflow-hidden flex items-center justify-end z-0">
-          <div className="relative w-full h-full max-w-[850px] flex items-center justify-end">
-            <img
-              src="/assets/new_design/hero_sports_car_clean.png"
-              alt="Auto Deportivo Negro Fibra de Carbono"
-              className="w-full h-full object-cover lg:object-contain object-right filter brightness-95 contrast-110 drop-shadow-[0_20px_40px_rgba(0,0,0,0.9)] opacity-35 sm:opacity-50 lg:opacity-100"
-            />
-            {/* Smooth gradient blend to seamlessly merge car with carbon background */}
-            <div className="absolute inset-y-0 left-0 w-32 sm:w-48 bg-gradient-to-r from-[#07090c] to-transparent pointer-events-none" />
-            <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#07090c] to-transparent pointer-events-none" />
-            <div className="absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-[#07090c] to-transparent pointer-events-none" />
-          </div>
-        </div>
-
         {/* Left Side: Editorial Typography & WhatsApp CTA */}
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full grid lg:grid-cols-2 items-center gap-8 lg:gap-12">
           <div className="max-w-2xl lg:max-w-xl space-y-6">
             
             {/* Slogan Pill / Top Accent */}
@@ -103,6 +88,17 @@ export default function FlagshipHomepage() {
             </div>
 
           </div>
+          <figure className="overflow-hidden rounded-2xl border border-white/15 bg-black shadow-xl">
+            <img
+              src={REAL_WORK_PHOTOS[4].src}
+              alt={REAL_WORK_PHOTOS[4].title}
+              className="w-full max-h-[560px] object-contain"
+              fetchPriority="high"
+            />
+            <figcaption className="px-4 py-3 text-xs text-neutral-300 border-t border-white/10">
+              Camaro gris · Fotografía real de nuestro taller
+            </figcaption>
+          </figure>
         </div>
 
       </section>
@@ -223,105 +219,28 @@ export default function FlagshipHomepage() {
             </button>
           </div>
 
-          {/* 3 Photos Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            
-            {/* Photo 1: Carrocería (Before / After split dent repair) */}
-            <div
-              onClick={() =>
-                setSelectedPhoto({
-                  src: '/assets/new_design/trabajo_carroceria.jpg',
-                  title: 'Hojalatería y Enderezado Estructural',
-                  subtitle: 'Antes y después de impacto lateral restaurado al 100% con acabado de fábrica.',
-                })
-              }
-              className="group cursor-pointer rounded-2xl bg-carbon-card border border-white/10 hover:border-white/30 overflow-hidden shadow-lg transition-all duration-300 hover:-translate-y-1"
-            >
-              <div className="relative aspect-[16/10] overflow-hidden bg-black">
-                <img
-                  src="/assets/new_design/trabajo_carroceria.jpg"
-                  alt="Carrocería Antes y Después"
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                <div className="absolute top-3 left-3 px-2 py-0.5 rounded bg-black/70 backdrop-blur-md text-[10px] font-bold text-neutral-300 uppercase tracking-wider border border-white/10">
-                  Antes / Después
+            {[REAL_WORK_PHOTOS[0], REAL_WORK_PHOTOS[8], REAL_WORK_PHOTOS[5]].map((photo) => (
+              <button
+                key={photo.id}
+                type="button"
+                onClick={() => setSelectedPhoto({ src: photo.src, title: photo.title, subtitle: photo.desc })}
+                className="group text-left cursor-pointer rounded-2xl bg-carbon-card border border-white/10 hover:border-white/30 overflow-hidden shadow-lg transition-all hover:-translate-y-1"
+              >
+                <div className="aspect-[4/3] bg-black overflow-hidden">
+                  <img
+                    src={photo.src}
+                    alt={photo.title}
+                    loading="lazy"
+                    className="w-full h-full object-contain transition-transform group-hover:scale-105"
+                  />
                 </div>
-              </div>
-              <div className="p-4 text-center border-t border-white/5">
-                <div className="font-serif-luxury text-xl font-bold text-white group-hover:text-amber-300 transition-colors">
-                  Carrocería
+                <div className="p-4 border-t border-white/5">
+                  <h3 className="font-serif-luxury text-xl font-bold">{photo.title}</h3>
+                  <p className="text-xs text-neutral-400 mt-1">{photo.desc}</p>
                 </div>
-                <div className="text-[11px] text-neutral-400 mt-0.5">
-                  Enderezado y alineación milimétrica
-                </div>
-              </div>
-            </div>
-
-            {/* Photo 2: Pintura (Deep gloss black mirror paint) */}
-            <div
-              onClick={() =>
-                setSelectedPhoto({
-                  src: '/assets/new_design/trabajo_pintura.jpg',
-                  title: 'Pintura Automotriz en Horno de Secado',
-                  subtitle: 'Aplicación de poliuretano de alta resistencia con brillo profundo espejo.',
-                })
-              }
-              className="group cursor-pointer rounded-2xl bg-carbon-card border border-white/10 hover:border-white/30 overflow-hidden shadow-lg transition-all duration-300 hover:-translate-y-1"
-            >
-              <div className="relative aspect-[16/10] overflow-hidden bg-black">
-                <img
-                  src="/assets/new_design/trabajo_pintura.jpg"
-                  alt="Pintura Espejo"
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                <div className="absolute top-3 left-3 px-2 py-0.5 rounded bg-black/70 backdrop-blur-md text-[10px] font-bold text-neutral-300 uppercase tracking-wider border border-white/10">
-                  Cabina al Horno
-                </div>
-              </div>
-              <div className="p-4 text-center border-t border-white/5">
-                <div className="font-serif-luxury text-xl font-bold text-white group-hover:text-amber-300 transition-colors">
-                  Pintura
-                </div>
-                <div className="text-[11px] text-neutral-400 mt-0.5">
-                  Colorimetría OEM y transparente alto sólido
-                </div>
-              </div>
-            </div>
-
-            {/* Photo 3: Detalle (Microfiber polishing) */}
-            <div
-              onClick={() =>
-                setSelectedPhoto({
-                  src: '/assets/new_design/trabajo_detalle.jpg',
-                  title: 'Detallado Profesional Genesis',
-                  subtitle: 'Corrección de pintura en múltiples pasos y protección cerámica 9H.',
-                })
-              }
-              className="group cursor-pointer rounded-2xl bg-carbon-card border border-white/10 hover:border-white/30 overflow-hidden shadow-lg transition-all duration-300 hover:-translate-y-1"
-            >
-              <div className="relative aspect-[16/10] overflow-hidden bg-black">
-                <img
-                  src="/assets/new_design/trabajo_detalle.jpg"
-                  alt="Detallado Automotriz"
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                <div className="absolute top-3 left-3 px-2 py-0.5 rounded bg-black/70 backdrop-blur-md text-[10px] font-bold text-neutral-300 uppercase tracking-wider border border-white/10">
-                  Detallado Genesis
-                </div>
-              </div>
-              <div className="p-4 text-center border-t border-white/5">
-                <div className="font-serif-luxury text-xl font-bold text-white group-hover:text-amber-300 transition-colors">
-                  Detalle
-                </div>
-                <div className="text-[11px] text-neutral-400 mt-0.5">
-                  Corrección de barniz y sellado cerámico
-                </div>
-              </div>
-            </div>
-
+              </button>
+            ))}
           </div>
 
         </div>
@@ -360,7 +279,7 @@ export default function FlagshipHomepage() {
           {/* 3 Instagram Image Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             
-            {/* Card 1: Taillight ("DETALLES QUE INSPIRAN") */}
+            {/* Original GMC photograph */}
             <a
               href={BUSINESS_INFO.social.instagram}
               target="_blank"
@@ -368,16 +287,17 @@ export default function FlagshipHomepage() {
               className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-black border border-white/10 hover:border-white/30 group cursor-pointer shadow-xl transition-all duration-300 hover:-translate-y-1"
             >
               <img
-                src="/assets/new_design/insta_1.jpg"
-                alt="Detalles que inspiran"
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-108"
+                src={REAL_WORK_PHOTOS[2].src}
+                alt={REAL_WORK_PHOTOS[2].title}
+                loading="lazy"
+                className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
               
               <div className="absolute bottom-5 left-5 right-5">
                 <div className="text-xs font-semibold tracking-[0.25em] text-neutral-200 uppercase leading-snug">
-                  DETALLES <br />
-                  <span className="text-white font-bold">QUE INSPIRAN</span>
+                  GMC <br />
+                  <span className="text-white font-bold">PLATEADA</span>
                 </div>
               </div>
 
@@ -386,7 +306,7 @@ export default function FlagshipHomepage() {
               </div>
             </a>
 
-            {/* Card 2: Wheel Rim & Caliper ("ACABADOS DE OTRO NIVEL") */}
+            {/* Original Camaro photograph */}
             <a
               href={BUSINESS_INFO.social.instagram}
               target="_blank"
@@ -394,16 +314,17 @@ export default function FlagshipHomepage() {
               className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-black border border-white/10 hover:border-white/30 group cursor-pointer shadow-xl transition-all duration-300 hover:-translate-y-1"
             >
               <img
-                src="/assets/new_design/insta_2.jpg"
-                alt="Acabados de otro nivel"
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-108"
+                src={REAL_WORK_PHOTOS[4].src}
+                alt={REAL_WORK_PHOTOS[4].title}
+                loading="lazy"
+                className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
               
               <div className="absolute bottom-5 left-5 right-5">
                 <div className="text-xs font-semibold tracking-[0.25em] text-neutral-200 uppercase leading-snug">
-                  ACABADOS <br />
-                  <span className="text-white font-bold">DE OTRO NIVEL</span>
+                  CAMARO <br />
+                  <span className="text-white font-bold">GRIS</span>
                 </div>
               </div>
 
@@ -412,7 +333,7 @@ export default function FlagshipHomepage() {
               </div>
             </a>
 
-            {/* Card 3: Painter Spray Gun ("PASIÓN EN CADA CAPA") */}
+            {/* Original workshop photograph */}
             <a
               href={BUSINESS_INFO.social.instagram}
               target="_blank"
@@ -420,16 +341,17 @@ export default function FlagshipHomepage() {
               className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-black border border-white/10 hover:border-white/30 group cursor-pointer shadow-xl transition-all duration-300 hover:-translate-y-1"
             >
               <img
-                src="/assets/new_design/insta_3.jpg"
-                alt="Pasión en cada capa"
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-108"
+                src={REAL_WORK_PHOTOS[3].src}
+                alt={REAL_WORK_PHOTOS[3].title}
+                loading="lazy"
+                className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
               
               <div className="absolute bottom-5 left-5 right-5">
                 <div className="text-xs font-semibold tracking-[0.25em] text-neutral-200 uppercase leading-snug">
-                  PASIÓN <br />
-                  <span className="text-white font-bold">EN CADA CAPA</span>
+                  NUESTRO <br />
+                  <span className="text-white font-bold">TALLER</span>
                 </div>
               </div>
 
@@ -529,6 +451,7 @@ export default function FlagshipHomepage() {
               </h3>
               <button
                 onClick={() => setSelectedPhoto(null)}
+                aria-label="Cerrar foto"
                 className="w-8 h-8 rounded-full bg-neutral-800 hover:bg-neutral-700 text-white flex items-center justify-center transition-colors cursor-pointer"
               >
                 <X className="w-4 h-4" />
