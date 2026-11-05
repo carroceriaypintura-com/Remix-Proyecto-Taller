@@ -7,7 +7,7 @@ import {
   Phone,
   MessageCircle,
 } from 'lucide-react';
-import { BUSINESS_INFO, REAL_WORK_PHOTOS } from '../data/content';
+import { BUSINESS_INFO, REAL_WORK_PHOTOS, FEATURED_WORK_PHOTO } from '../data/content';
 
 export default function FlagshipHomepage() {
   const [selectedPhoto, setSelectedPhoto] = useState<{
@@ -90,13 +90,13 @@ export default function FlagshipHomepage() {
           </div>
           <figure className="overflow-hidden rounded-2xl border border-white/15 bg-black shadow-xl">
             <img
-              src={REAL_WORK_PHOTOS[4].src}
-              alt={REAL_WORK_PHOTOS[4].title}
+              src={FEATURED_WORK_PHOTO.src}
+              alt={FEATURED_WORK_PHOTO.title}
               className="w-full max-h-[560px] object-contain"
               fetchPriority="high"
             />
             <figcaption className="px-4 py-3 text-xs text-neutral-300 border-t border-white/10">
-              Camaro gris · Fotografía real de nuestro taller
+              Jeep con el cofre abierto · Fotografía real de nuestro taller
             </figcaption>
           </figure>
         </div>

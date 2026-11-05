@@ -114,6 +114,15 @@ export const REAL_WORK_PHOTOS = [
     descEn: 'Black BMW with polishing equipment and products.',
     category: 'Pulido',
   },
+  {
+    id: 'jeep-cofre-abierto',
+    src: '/assets/workshop/jeep-cofre-abierto.jpg',
+    title: 'Jeep con el cofre abierto',
+    titleEn: 'Jeep with the hood open',
+    desc: 'Jeep en el taller con el cofre abierto bajo la lona roja.',
+    descEn: 'Jeep at the workshop with the hood open under the red canopy.',
+    category: 'Vehículos',
+  },
 ];
 
 export const SERVICES_LIST = [
@@ -172,3 +181,6 @@ export const SERVICES_LIST = [
     warranty: 'Limpieza e higienización al 100%',
   },
 ];
+
+// Chosen explicitly by the workshop owner for the homepage.
+export const FEATURED_WORK_PHOTO = REAL_WORK_PHOTOS.find((photo) => photo.id === 'jeep-cofre-abierto')!;
