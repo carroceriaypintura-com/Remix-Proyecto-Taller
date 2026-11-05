@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Camera, X, ZoomIn, ArrowRight, ChevronLeft, ChevronRight, Images, MessageCircle } from 'lucide-react';
 import { Language } from '../types';
 import { REAL_WORK_PHOTOS, BUSINESS_INFO } from '../data/content';
@@ -169,9 +170,9 @@ export default function RealGallery({ lang }: RealGalleryProps) {
         </div>
 
         {/* Full Gallery Lightbox Modal */}
-        {modalOpen && (
+        {modalOpen && createPortal(
           <div
-            className="fixed inset-0 z-50 bg-[#12141c]/95 flex items-center justify-center p-3 sm:p-6"
+            className="fixed inset-0 z-[60] bg-[#12141c]/95 flex items-center justify-center p-3 sm:p-6"
             onClick={() => setModalOpen(false)}
           >
             <div
@@ -254,7 +255,7 @@ export default function RealGallery({ lang }: RealGalleryProps) {
               </div>
             </div>
           </div>
-        )}
+        , document.body)}
 
       </div>
     </section>
