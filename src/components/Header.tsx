@@ -40,14 +40,14 @@ export default function Header({ onOpenWorkspace }: HeaderProps) {
         {/* Contact and social links stay visible at every screen size. */}
         <nav
           aria-label="Contacto y redes sociales"
-          className="col-span-2 row-start-2 grid grid-cols-2 sm:flex sm:flex-wrap lg:flex-nowrap items-center gap-2 lg:gap-3 lg:ml-auto"
+          className="col-span-2 row-start-2 grid grid-cols-4 sm:flex sm:flex-wrap lg:flex-nowrap items-center gap-2 lg:gap-3 lg:ml-auto"
         >
           <a
             href={BUSINESS_INFO.social.whatsapp}
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Contactar por WhatsApp"
-            className="inline-flex min-h-11 items-center justify-center gap-2 px-3.5 py-2.5 rounded-full text-xs sm:text-sm font-bold text-black bg-emerald-500 hover:bg-emerald-400 border border-emerald-300/30 transition-all shadow-[0_0_20px_rgba(16,185,129,0.25)] hover:scale-105"
+            className="inline-flex min-h-11 items-center justify-center gap-1 sm:gap-2 px-1.5 sm:px-3.5 py-2.5 rounded-full text-[10px] sm:text-sm font-bold text-black bg-emerald-500 hover:bg-emerald-400 border border-emerald-300/30 transition-all shadow-[0_0_20px_rgba(16,185,129,0.25)] hover:scale-105"
           >
             <i className="fa-brands fa-whatsapp text-base" aria-hidden="true"></i>
             <span>WhatsApp<span className="hidden xl:inline"> {BUSINESS_INFO.whatsappDisplay}</span></span>
@@ -58,7 +58,7 @@ export default function Header({ onOpenWorkspace }: HeaderProps) {
             target="_blank"
             rel="noopener noreferrer"
             title="Facebook Oficial"
-            className="inline-flex min-h-11 items-center justify-center gap-2 px-3.5 py-2.5 rounded-full text-xs sm:text-sm font-semibold text-white bg-[#1877F2] hover:bg-[#166fe5] border border-blue-400/30 transition-all shadow-md hover:scale-105"
+            className="inline-flex min-h-11 items-center justify-center gap-1 sm:gap-2 px-1.5 sm:px-3.5 py-2.5 rounded-full text-[10px] sm:text-sm font-semibold text-white bg-[#1877F2] hover:bg-[#166fe5] border border-blue-400/30 transition-all shadow-md hover:scale-105"
           >
             <i className="fa-brands fa-facebook-f text-sm" aria-hidden="true"></i>
             <span>Facebook</span>
@@ -69,7 +69,7 @@ export default function Header({ onOpenWorkspace }: HeaderProps) {
             target="_blank"
             rel="noopener noreferrer"
             title="Instagram Oficial"
-            className="inline-flex min-h-11 items-center justify-center gap-2 px-3.5 py-2.5 rounded-full text-xs sm:text-sm font-semibold text-white bg-gradient-to-r from-[#f09433] via-[#dc2743] to-[#bc1888] hover:opacity-95 border border-rose-400/30 transition-all shadow-md hover:scale-105"
+            className="inline-flex min-h-11 items-center justify-center gap-1 sm:gap-2 px-1.5 sm:px-3.5 py-2.5 rounded-full text-[10px] sm:text-sm font-semibold text-white bg-gradient-to-r from-[#f09433] via-[#dc2743] to-[#bc1888] hover:opacity-95 border border-rose-400/30 transition-all shadow-md hover:scale-105"
           >
             <i className="fa-brands fa-instagram text-sm" aria-hidden="true"></i>
             <span>Instagram</span>
@@ -80,10 +80,10 @@ export default function Header({ onOpenWorkspace }: HeaderProps) {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="X (Twitter)"
-            className="inline-flex min-h-11 min-w-11 items-center justify-center gap-2 px-3.5 py-2.5 rounded-full text-xs sm:text-sm font-semibold text-white bg-neutral-900 hover:bg-neutral-800 border border-white/20 transition-all shadow-md hover:scale-105"
+            className="inline-flex min-h-11 min-w-11 items-center justify-center gap-1 sm:gap-2 px-1.5 sm:px-3.5 py-2.5 rounded-full text-[10px] sm:text-sm font-semibold text-white bg-neutral-900 hover:bg-neutral-800 border border-white/20 transition-all shadow-md hover:scale-105"
           >
             <i className="fa-brands fa-x-twitter text-sm" aria-hidden="true"></i>
-            <span className="sm:sr-only">X (Twitter)</span>
+            <span className="sm:sr-only">X</span>
           </a>
         </nav>
 

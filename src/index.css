@@ -50,3 +50,38 @@ html {
 ::-webkit-scrollbar-thumb:hover {
   background: #404040;
 }
+
+/* Shared touch-friendly palette for navigation and primary actions. */
+.action-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  min-height: 44px;
+  padding: .65rem 1rem;
+  border-radius: 999px;
+  border: 1px solid rgb(255 255 255 / .2);
+  font-size: .8125rem;
+  font-weight: 700;
+  line-height: 1.35;
+  text-align: center;
+  cursor: pointer;
+  transition: filter .2s, transform .2s;
+}
+.action-pill:hover { filter: brightness(1.12); }
+.action-pill:focus-visible, button:focus-visible, a:focus-visible, summary:focus-visible {
+  outline: 2px solid #fcd34d;
+  outline-offset: 3px;
+}
+.action-pill svg { width: 18px; height: 18px; flex-shrink: 0; }
+.action-amber { background: #fbbf24; color: #111827; }
+.action-green { background: #10b981; color: #071a13; }
+.action-purple { background: #7e22ce; color: white; }
+.action-blue { background: #1d4ed8; color: white; }
+.action-rose { background: #be123c; color: white; }
+section[id] { scroll-margin-top: 160px; }
+@media (min-width: 1024px) { section[id] { scroll-margin-top: 104px; } }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+}

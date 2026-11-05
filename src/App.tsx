@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { MessageCircle, ArrowUp } from 'lucide-react';
+import { MessageCircle, ArrowUp, MapPin, Play } from 'lucide-react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 import { Language } from './types';
 import Header from './components/Header';
@@ -58,34 +58,35 @@ export default function App() {
       />
 
       <main className="flex-1 relative z-10">
-        {/* 2. New Flagship Homepage (Dark Carbon Fiber Theme, High-Gloss Sports Car, 3 Tabs, Recent Works & Instagram) */}
+        {/* Compact homepage: Jeep, location, navigation and photo album. */}
         <FlagshipHomepage />
 
-        {/* 3. Core Services Breakdown (Target for "Servicios" tab) */}
-        <ServicesGrid lang={lang} />
-
-        {/* 4. Real Photos Gallery (Target for "Galería" tab & "Ver galería completa") */}
         <RealGallery lang={lang} />
-
-        {/* 5. Official Social Proof & Real Customer Highlights */}
-        <SocialShowcase lang={lang} />
-
-        {/* 6. Quick Online Quote Calculator */}
+        <ServicesGrid lang={lang} />
+        <div className="max-w-7xl mx-auto px-4 py-4">
+          <details className="rounded-2xl border border-white/10 bg-[#10141d]">
+            <summary className="action-pill action-purple m-3 cursor-pointer"><Play aria-hidden="true" />Videos y opciones de redes</summary>
+            <SocialShowcase lang={lang} />
+          </details>
+        </div>
         <QuoteEstimator lang={lang} />
-
-        {/* 7. Location, Embedded Google Maps & Contact (Target for "Ubicación" tab) */}
-        <LocationContact lang={lang} />
+        <div className="max-w-7xl mx-auto px-4 pb-8">
+          <details className="rounded-2xl border border-white/10 bg-[#10141d]">
+            <summary className="action-pill action-rose m-3 cursor-pointer"><MapPin aria-hidden="true" />Más opciones de ubicación y contacto</summary>
+            <LocationContact lang={lang} />
+          </details>
+        </div>
       </main>
 
       {/* 8. Modern Quiet Footer */}
       <Footer lang={lang} />
 
       {/* Floating Action Buttons */}
-      <div className="fixed bottom-6 right-6 z-40 flex items-center gap-2.5">
+      <div className="fixed bottom-3 right-3 sm:bottom-6 sm:right-6 z-40 flex items-center gap-2.5">
         <button
           onClick={scrollToTop}
           aria-label="Volver arriba"
-          className="w-11 h-11 rounded-full bg-[#121620] border border-white/15 text-neutral-300 hover:text-white hover:bg-[#1b2130] flex items-center justify-center shadow-lg transition-all hover:scale-105 cursor-pointer"
+          className="action-pill action-blue !px-3"
         >
           <ArrowUp className="w-4 h-4" />
         </button>
