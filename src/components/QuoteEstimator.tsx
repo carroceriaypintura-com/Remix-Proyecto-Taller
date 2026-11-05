@@ -1,5 +1,5 @@
 import { useState, useId } from 'react';
-import { Upload, Trash2, MessageCircle, Sparkles, Check, Send, CheckCircle2 } from 'lucide-react';
+import { Wrench, Upload, Trash2, MessageCircle, Sparkles, Check, Send, CheckCircle2 } from 'lucide-react';
 import { Language } from '../types';
 import { BUSINESS_INFO } from '../data/content';
 import { saveQuote } from '../lib/firebase';
@@ -95,11 +95,11 @@ _Hola, envío mis datos para una valoración personalizada de mi auto en José Z
   };
 
   return (
-    <section id="cotizador" className="py-16 sm:py-24 bg-[#12141c] border-b border-white/5 relative">
+    <section id="cotizador" className="py-8 sm:py-12 bg-[#12141c] border-b border-white/5 relative">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-12">
+        <div className="text-center max-w-2xl mx-auto mb-5">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-semibold mb-3">
             <Sparkles className="w-3.5 h-3.5 text-amber-500" />
             <span>{lang === 'es' ? 'Presupuesto Rápido Online' : 'Quick Online Estimate'}</span>
@@ -115,7 +115,7 @@ _Hola, envío mis datos para una valoración personalizada de mi auto en José Z
         </div>
 
         {/* Solid Slate Card #1a1d26 (No glassmorphism, rounded-2xl, soft shadow) */}
-        <div className="relative rounded-2xl bg-[#1a1d26] border border-white/5 p-6 sm:p-9 space-y-7 shadow-md">
+        <div className="relative rounded-2xl bg-[#1a1d26] border border-white/5 p-4 sm:p-7 space-y-7 shadow-md">
           
           {/* Step 1: Select Service */}
           <div>
@@ -136,10 +136,11 @@ _Hola, envío mis datos para una valoración personalizada de mi auto en José Z
                     key={s.id}
                     type="button"
                     onClick={() => setSelectedService(s.id)}
+                    aria-pressed={isSelected}
                     className={`p-3.5 rounded-2xl border text-left text-xs transition-all cursor-pointer relative ${
                       isSelected
-                        ? 'bg-amber-500/15 border-amber-500/40 text-white font-bold shadow-sm'
-                        : 'bg-[#12141c] border-white/5 text-neutral-300 hover:border-amber-500/20 hover:text-white'
+                        ? 'bg-amber-400 border-amber-200 text-black font-bold ring-2 ring-amber-200'
+                        : 'bg-indigo-800 border-indigo-400/40 text-white hover:bg-indigo-700'
                     }`}
                   >
                     {s.badge && (
@@ -147,7 +148,8 @@ _Hola, envío mis datos para una valoración personalizada de mi auto en José Z
                         {s.badge}
                       </span>
                     )}
-                    <div className="truncate font-medium text-xs mt-1">
+                    <Wrench aria-hidden="true" className="w-4 h-4 mb-2" />
+                    <div className="font-medium text-xs mt-1 leading-relaxed">
                       {lang === 'es' ? s.nameEs : s.nameEn}
                     </div>
                   </button>
@@ -178,7 +180,7 @@ _Hola, envío mis datos para una valoración personalizada de mi auto en José Z
               <div className="flex items-center gap-2">
                 <label
                   htmlFor={photoInputId}
-                  className="cursor-pointer inline-flex items-center gap-2 px-4 py-3 bg-[#12141c] hover:bg-[#202430] border border-white/10 hover:border-amber-500/30 rounded-2xl text-xs font-semibold text-neutral-200 hover:text-white transition-all shadow-sm"
+                  className="action-pill action-purple"
                 >
                   <Upload className="w-4 h-4 text-amber-500" />
                   <span>{lang === 'es' ? 'Adjuntar Fotos del Auto' : 'Attach Vehicle Photos'}</span>
@@ -274,13 +276,13 @@ _Hola, envío mis datos para una valoración personalizada de mi auto en José Z
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
+            <div className="flex flex-col items-stretch gap-2.5">
               {/* Save to Firestore Online Button */}
               <button
                 type="button"
                 onClick={handleSaveToFirestore}
                 disabled={savingFirestore}
-                className="inline-flex items-center justify-center gap-2 px-5 py-3.5 bg-[#252c3c] hover:bg-[#30394e] text-neutral-100 font-bold text-xs rounded-full border border-white/15 transition-all shadow-sm cursor-pointer disabled:opacity-50"
+                className="action-pill action-blue disabled:opacity-50"
               >
                 <Send className="w-3.5 h-3.5 text-amber-400" />
                 <span>{savingFirestore ? 'Guardando...' : 'Registrar Cotización en Taller'}</span>
@@ -290,10 +292,10 @@ _Hola, envío mis datos para una valoración personalizada de mi auto en José Z
               <button
                 type="button"
                 onClick={handleSendWhatsApp}
-                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-amber-500 hover:bg-amber-400 text-neutral-950 font-bold text-xs sm:text-sm rounded-full transition-all shadow-md hover:scale-105 whitespace-nowrap cursor-pointer"
+                className="action-pill action-green"
               >
                 <MessageCircle className="w-4 h-4 fill-neutral-950" />
-                <span>{lang === 'es' ? 'Enviar mis datos para una valoración personalizada' : 'Send my details for a personalized estimate'}</span>
+                <span>{lang === 'es' ? 'Enviar por WhatsApp' : 'Send via WhatsApp'}</span>
               </button>
             </div>
           </div>

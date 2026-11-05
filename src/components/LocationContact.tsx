@@ -116,7 +116,7 @@ export default function LocationContact({ lang }: LocationContactProps) {
   };
 
   return (
-    <section id="ubicacion" className="py-16 sm:py-24 bg-[#12141c] border-b border-white/5 relative">
+    <section id="ubicacion-detalle" className="py-6 sm:py-10 bg-[#12141c] border-b border-white/5 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
@@ -409,7 +409,7 @@ export default function LocationContact({ lang }: LocationContactProps) {
               <div className="grid grid-cols-2 gap-3 pt-1">
                 <a
                   href={`tel:${BUSINESS_INFO.phoneCall}`}
-                  className="py-3 px-4 rounded-xl bg-[#12141c] hover:bg-[#202430] text-white text-xs font-bold text-center transition-all flex items-center justify-center gap-2 border border-white/5"
+                  className="action-pill action-blue"
                 >
                   <Phone className="w-3.5 h-3.5 text-amber-500" />
                   <span>{lang === 'es' ? 'Llamar' : 'Call'}</span>
@@ -423,7 +423,7 @@ export default function LocationContact({ lang }: LocationContactProps) {
                   )}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-black text-xs font-bold text-center transition-all flex items-center justify-center gap-2 shadow-sm"
+                  className="action-pill action-green"
                 >
                   <MessageCircle className="w-3.5 h-3.5 fill-black" />
                   <span>WhatsApp</span>
