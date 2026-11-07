@@ -6,6 +6,10 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   build: {
     rolldownOptions: {
+      input: {
+        main: 'index.html',
+        integrations: 'integraciones.html',
+      },
       output: {
         codeSplitting: {
           // Cache the large SDKs separately without hiding bundle-size warnings.

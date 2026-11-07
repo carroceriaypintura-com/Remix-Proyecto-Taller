@@ -2,8 +2,14 @@
 
 This branch is based on the production revision 1777e0e. No public page, image,
 style, contact link, navigation, Firebase client flow or DNS setting is changed.
-The server API is a foundation for authorized integrations, not a new public UI
-and not a claim that provider operations have passed end-to-end tests.
+The server API is a foundation for authorized integrations, not a claim that
+provider operations have passed end-to-end tests. A separate, noindex setup page
+at `/integraciones.html` lets the owner sign in with the existing Firebase Google
+flow, prepare each OAuth consent URL and check credential availability. No
+navigation link or change is added to the existing workshop homepage. The extra
+Vite entry can change shared chunk filenames without changing the homepage UI.
+Preview Google sign-in requires the selected preview hostname to be authorized
+in Firebase; no Firebase configuration is changed by this branch.
 
 ## Registered connectors
 
