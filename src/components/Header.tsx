@@ -1,11 +1,6 @@
 import { BUSINESS_INFO } from '../data/content';
-import { Sparkles } from 'lucide-react';
 
-interface HeaderProps {
-  onOpenWorkspace?: () => void;
-}
-
-export default function Header({ onOpenWorkspace }: HeaderProps) {
+export default function Header() {
   return (
     <header className="sticky top-0 z-50 bg-[#080a0e]/95 backdrop-blur-md border-b border-white/10 transition-all shadow-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-h-20 py-3 lg:py-0 lg:h-24 grid grid-cols-[minmax(0,1fr)_auto] lg:flex items-center justify-between gap-x-2 sm:gap-x-4 gap-y-3">
@@ -86,18 +81,6 @@ export default function Header({ onOpenWorkspace }: HeaderProps) {
             <span className="sr-only">X</span>
           </a>
         </nav>
-
-        {onOpenWorkspace && (
-          <button
-            onClick={onOpenWorkspace}
-            aria-label="Google Workspace"
-            title="Google Workspace"
-            className="col-start-2 row-start-1 inline-flex min-h-11 min-w-11 items-center justify-center px-3 rounded-full text-xs font-bold text-white bg-gradient-to-r from-amber-600 via-purple-600 to-indigo-600 hover:opacity-90 border border-white/20 transition-all shadow-md hover:scale-105 cursor-pointer"
-          >
-            <Sparkles className="w-4 h-4 text-amber-300" aria-hidden="true" />
-          </button>
-        )}
-
       </div>
     </header>
   );
