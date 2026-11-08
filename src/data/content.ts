@@ -38,8 +38,8 @@ export const REAL_WORK_PHOTOS = [
     src: '/assets/workshop/gmc-frente.jpg',
     title: 'GMC plateada — vista frontal',
     titleEn: 'Silver GMC — front view',
-    desc: 'Fotografía real de la GMC plateada, vista desde el frente.',
-    descEn: 'Original photo of the silver GMC from the front.',
+    desc: 'GMC plateada, vista desde el frente.',
+    descEn: 'Silver GMC from the front.',
     category: 'Vehículos',
   },
   {
@@ -65,8 +65,8 @@ export const REAL_WORK_PHOTOS = [
     src: '/assets/workshop/camaro-gris.jpg',
     title: 'Camaro gris',
     titleEn: 'Gray Camaro',
-    desc: 'Fotografía real del Camaro gris, compartida por el taller.',
-    descEn: 'Original gray Camaro photo shared by the workshop.',
+    desc: 'Camaro gris en el taller.',
+    descEn: 'Gray Camaro at the workshop.',
     category: 'Vehículos',
   },
   {
