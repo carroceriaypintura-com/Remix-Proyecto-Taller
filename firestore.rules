@@ -12,7 +12,7 @@ service cloud.firestore {
     }
 
     function isAdmin() {
-      return isSignedIn() && (
+      return isSignedIn() && request.auth.token.email_verified == true && (
         request.auth.token.email == 'carroceriaypinturanogales@gmail.com' ||
         exists(/databases/$(database)/documents/admins/$(request.auth.uid))
       );
@@ -38,18 +38,20 @@ service cloud.firestore {
 
     // Admins collection
     match /admins/{adminId} {
-      allow read: if isSignedIn();
-      allow write: if isAdmin();
+      allow get: if isSignedIn() && (request.auth.uid == adminId || isAdmin());
+      allow list: if isAdmin();
+      // Only the verified owner can grant or revoke administrator membership.
+      allow write: if isSignedIn() && request.auth.token.email_verified == true &&
+        request.auth.token.email == 'carroceriaypinturanogales@gmail.com';
     }
 
     // Quotes collection
     match /quotes/{quoteId} {
-      allow get: if isValidId(quoteId);
-      allow list: if isAdmin() || (isSignedIn() && resource.data.userId == request.auth.uid);
-      allow create: if isValidId(quoteId) &&
+      allow get, list: if isAdmin();
+      allow create: if isAdmin() && isValidId(quoteId) &&
                       isValidQuote(request.resource.data) &&
                       request.resource.data.status in ['recibida', 'en_revision'];
-      allow update: if isValidId(quoteId) && (isAdmin() || (isSignedIn() && resource.data.userId == request.auth.uid));
+      allow update: if isValidId(quoteId) && isAdmin() && isValidQuote(request.resource.data);
       allow delete: if isValidId(quoteId) && isAdmin();
     }
 

@@ -12,15 +12,14 @@ import {
   doc,
   collection,
   setDoc,
-  getDocs,
   onSnapshot,
   query,
-  where,
   orderBy,
   updateDoc,
   serverTimestamp,
   getDocFromServer,
 } from 'firebase/firestore';
+import { isVerifiedOwner, canUseAdministration } from './adminPolicy';
 import firebaseConfig from '../../firebase-applet-config.json';
 
 // Initialize Firebase App
@@ -36,18 +35,6 @@ export const db = getFirestore(app, firestoreDatabaseId);
 // Initialize Auth
 export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();
-
-// Test Connection on initial boot as required by Firebase skill
-async function testConnection() {
-  try {
-    await getDocFromServer(doc(db, 'test', 'connection'));
-  } catch (error) {
-    if (error instanceof Error && error.message.includes('the client is offline')) {
-      console.warn('Firebase client is offline or initializing.');
-    }
-  }
-}
-testConnection();
 
 // Structured Firestore Error Handling as mandated by Firebase skill
 export enum OperationType {
@@ -146,8 +133,21 @@ export async function logoutUser(): Promise<void> {
   await signOut(auth);
 }
 
+// UI checks improve behavior; deployed Firestore rules remain the security boundary.
+export async function requireAdministrator(): Promise<User> {
+  const user = auth.currentUser;
+  if (!user || !user.emailVerified) throw new Error('Acceso no autorizado.');
+  if (isVerifiedOwner(user)) return user;
+  const membership = await getDocFromServer(doc(db, 'admins', user.uid));
+  if (auth.currentUser?.uid !== user.uid || !canUseAdministration(user, membership.exists())) {
+    throw new Error('Acceso no autorizado.');
+  }
+  return user;
+}
+
 // Quotes Service
 export async function saveQuote(quote: Omit<StoredQuote, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> {
+  await requireAdministrator();
   const quoteId = 'cot-' + Date.now().toString(36) + '-' + Math.random().toString(36).substring(2, 6);
   const path = `quotes/${quoteId}`;
   try {
@@ -165,44 +165,29 @@ export async function saveQuote(quote: Omit<StoredQuote, 'id' | 'createdAt' | 'u
 }
 
 export function subscribeToQuotes(onData: (quotes: StoredQuote[]) => void, onError?: (err: Error) => void) {
-  if (!auth.currentUser) {
-    onData([]);
-    return () => {};
-  }
-  const path = 'quotes';
-  const isAdminUser = auth.currentUser.email === 'carroceriaypinturanogales@gmail.com';
-  const q = isAdminUser
-    ? query(collection(db, path), orderBy('createdAt', 'desc'))
-    : query(collection(db, path), where('userId', '==', auth.currentUser.uid), orderBy('createdAt', 'desc'));
-
-  return onSnapshot(
-    q,
-    (snapshot) => {
-      const items: StoredQuote[] = [];
-      snapshot.forEach((docSnap) => {
-        items.push(docSnap.data() as StoredQuote);
-      });
-      onData(items);
-    },
-    (error) => {
-      handleFirestoreError(error, OperationType.LIST, path);
-      onError?.(error instanceof Error ? error : new Error(String(error)));
-    }
-  );
+  let disposed = false;
+  let unsubscribe = () => {};
+  requireAdministrator().then(() => {
+    if (disposed) return;
+    unsubscribe = onSnapshot(
+      query(collection(db, 'quotes'), orderBy('createdAt', 'desc')),
+      snapshot => onData(snapshot.docs.map(item => item.data() as StoredQuote)),
+      error => onError?.(error)
+    );
+  }).catch(error => { if (!disposed) { onData([]); onError?.(error); } });
+  return () => { disposed = true; unsubscribe(); };
 }
 
 export async function updateQuoteStatus(quoteId: string, newStatus: StoredQuote['status'], adminNotes?: string) {
+  await requireAdministrator();
   const path = `quotes/${quoteId}`;
   try {
-    const quoteRef = doc(db, 'quotes', quoteId);
     const updatePayload: Record<string, any> = {
       status: newStatus,
       updatedAt: serverTimestamp(),
     };
-    if (adminNotes !== undefined) {
-      updatePayload.adminNotes = adminNotes;
-    }
-    await updateDoc(quoteRef, updatePayload);
+    if (adminNotes !== undefined) updatePayload.adminNotes = adminNotes;
+    await updateDoc(doc(db, 'quotes', quoteId), updatePayload);
   } catch (error) {
     handleFirestoreError(error, OperationType.UPDATE, path);
   }

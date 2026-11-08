@@ -1,8 +1,7 @@
 import { useState, useId } from 'react';
-import { Wrench, Upload, Trash2, MessageCircle, Sparkles, Check, Send, CheckCircle2 } from 'lucide-react';
+import { Wrench, Upload, Trash2, MessageCircle, Sparkles, Check } from 'lucide-react';
 import { Language } from '../types';
 import { BUSINESS_INFO } from '../data/content';
-import { saveQuote } from '../lib/firebase';
 
 interface QuoteEstimatorProps {
   lang: Language;
@@ -27,9 +26,6 @@ export default function QuoteEstimator({ lang }: QuoteEstimatorProps) {
   const [clientPhone, setClientPhone] = useState('');
   const [damageNotes, setDamageNotes] = useState('');
   const [uploadedPhotos, setUploadedPhotos] = useState<string[]>([]);
-  const [savingFirestore, setSavingFirestore] = useState(false);
-  const [savedQuoteId, setSavedQuoteId] = useState<string | null>(null);
-
   const activeService = COMMON_SERVICES.find((s) => s.id === selectedService) || COMMON_SERVICES[0];
   const usdMin = Math.round(activeService.minMxn / 18.5);
   const usdMax = Math.round(activeService.maxMxn / 18.5);
@@ -48,34 +44,6 @@ export default function QuoteEstimator({ lang }: QuoteEstimatorProps) {
     setUploadedPhotos((prev) => prev.filter((_, i) => i !== idx));
   };
 
-  const handleSaveToFirestore = async () => {
-    if (!clientName.trim() || !clientPhone.trim()) {
-      alert(lang === 'es' ? 'Por favor ingresa tu nombre y teléfono de contacto.' : 'Please enter your name and phone number.');
-      return;
-    }
-    setSavingFirestore(true);
-    try {
-      const qId = await saveQuote({
-        clientName: clientName.trim(),
-        clientPhone: clientPhone.trim(),
-        vehicleMake: vehicleModel.split(' ')[0] || 'Vehículo',
-        vehicleModel: vehicleModel || 'No especificado',
-        vehicleYear: '2024',
-        serviceType: activeService.nameEs,
-        description: damageNotes.trim() || 'Cotización solicitada desde la web',
-        estimatedRange: `$${activeService.minMxn.toLocaleString()} - $${activeService.maxMxn.toLocaleString()} MXN`,
-        status: 'recibida',
-        userId: 'web-client',
-      });
-      setSavedQuoteId(qId);
-    } catch (err) {
-      console.error(err);
-      alert(lang === 'es' ? 'Hubo un error al guardar tu cotización. Puedes enviarla por WhatsApp.' : 'Error saving quote. You can send it via WhatsApp.');
-    } finally {
-      setSavingFirestore(false);
-    }
-  };
-
   const handleSendWhatsApp = () => {
     const text = 
 `*SOLICITUD DE VALORACIÓN - CARROCERÍA Y PINTURA NOGALES*
@@ -87,7 +55,7 @@ export default function QuoteEstimator({ lang }: QuoteEstimatorProps) {
 *Estimado orientativo:* $${activeService.minMxn.toLocaleString()} - $${activeService.maxMxn.toLocaleString()} MXN (Aprox. $${usdMin} - $${usdMax} USD)
 *Detalles:* ${damageNotes || 'Sin notas'}
 *Fotos preparadas:* ${uploadedPhotos.length} foto(s)
-${savedQuoteId ? `*ID Folio Web:* ${savedQuoteId}\n` : ''}---------------------------------------
+---------------------------------------
 _Hola, envío mis datos para una valoración personalizada de mi auto en José Zazueta #16, Los Encinos._`;
 
     const url = `https://wa.me/${BUSINESS_INFO.whatsappNumber}?text=${encodeURIComponent(text)}`;
@@ -202,7 +170,7 @@ _Hola, envío mis datos para una valoración personalizada de mi auto en José Z
             </div>
           </div>
 
-          {/* Step 3: Optional Contact Details for Online Firestore Submission */}
+          {/* Step 3: Optional contact details for WhatsApp */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
             <div>
               <label className="block text-xs font-bold text-neutral-200 uppercase tracking-wider mb-2">
@@ -249,17 +217,7 @@ _Hola, envío mis datos para una valoración personalizada de mi auto en José Z
             </div>
           )}
 
-          {/* Saved in Firestore Badge */}
-          {savedQuoteId && (
-            <div className="p-3.5 rounded-xl bg-emerald-950/80 border border-emerald-500/40 text-emerald-300 text-xs flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                <span>¡Presupuesto registrado en el sistema del taller! Folio: <strong className="font-mono">{savedQuoteId}</strong></span>
-              </div>
-            </div>
-          )}
-
-          {/* Price Range & Direct WhatsApp / Firestore Actions */}
+          {/* Public estimate and WhatsApp contact. */}
           <div className="pt-6 border-t border-white/5 flex flex-col lg:flex-row lg:items-center justify-between gap-5">
             <div>
               <div className="text-xs text-neutral-400 mb-1">
@@ -277,17 +235,6 @@ _Hola, envío mis datos para una valoración personalizada de mi auto en José Z
             </div>
 
             <div className="flex flex-col items-stretch gap-2.5">
-              {/* Save to Firestore Online Button */}
-              <button
-                type="button"
-                onClick={handleSaveToFirestore}
-                disabled={savingFirestore}
-                className="action-pill action-blue disabled:opacity-50"
-              >
-                <Send className="w-3.5 h-3.5 text-amber-400" />
-                <span>{savingFirestore ? 'Guardando...' : 'Registrar Cotización en Taller'}</span>
-              </button>
-
               {/* WhatsApp Button */}
               <button
                 type="button"

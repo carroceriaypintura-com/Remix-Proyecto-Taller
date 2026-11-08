@@ -46,6 +46,7 @@ import {
   GoogleTask,
 } from '../lib/tasksService';
 import {
+  requireAdministrator,
   subscribeToQuotes,
   updateQuoteStatus,
   StoredQuote,
@@ -103,11 +104,18 @@ export default function GoogleWorkspaceHub({ isOpen, onClose }: GoogleWorkspaceH
 
   useEffect(() => {
     const unsubscribe = initFormsAuth(
-      (currentUser, accessToken) => {
-        setUser(currentUser);
-        setToken(accessToken);
-        setAuthChecking(false);
-        loadWorkspaceData(accessToken);
+      async (currentUser, accessToken) => {
+        try {
+          await requireAdministrator();
+          setUser(currentUser);
+          setToken(accessToken);
+          setAuthChecking(false);
+          await loadWorkspaceData(accessToken);
+        } catch {
+          setUser(null);
+          setToken(null);
+          setAuthChecking(false);
+        }
       },
       () => {
         setUser(null);
@@ -147,6 +155,7 @@ export default function GoogleWorkspaceHub({ isOpen, onClose }: GoogleWorkspaceH
   const loadWorkspaceData = async (accessToken: string) => {
     setLoading(true);
     try {
+      await requireAdministrator();
       // Load Forms
       const forms = await listGoogleForms(accessToken);
       setFormsList(forms);
@@ -175,6 +184,7 @@ export default function GoogleWorkspaceHub({ isOpen, onClose }: GoogleWorkspaceH
     try {
       const result = await googleFormsSignIn();
       if (result) {
+        await requireAdministrator();
         setUser(result.user);
         setToken(result.accessToken);
         showNotification('success', `Conectado como ${result.user.email}`);
