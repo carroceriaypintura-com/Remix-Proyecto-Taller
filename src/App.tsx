@@ -10,13 +10,11 @@ import SocialShowcase from './components/SocialShowcase';
 import QuoteEstimator from './components/QuoteEstimator';
 import LocationContact from './components/LocationContact';
 import Footer from './components/Footer';
-import GoogleWorkspaceHub from './components/GoogleWorkspaceHub';
 import { BUSINESS_INFO } from './data/content';
 
 export default function App() {
   const [lang, setLang] = useState<Language>('es');
   const [quotaExceeded, setQuotaExceeded] = useState(false);
-  const [isWorkspaceOpen, setIsWorkspaceOpen] = useState(false);
 
   useEffect(() => {
     const handleQuota = () => setQuotaExceeded(true);
@@ -48,14 +46,8 @@ export default function App() {
         </div>
       )}
 
-      {/* 1. Header with Brand Identity, Shield Logo, Google Workspace Hub Button and Socials */}
-      <Header onOpenWorkspace={() => setIsWorkspaceOpen(true)} />
-
-      {/* Google Workspace & Firebase Hub Modal */}
-      <GoogleWorkspaceHub
-        isOpen={isWorkspaceOpen}
-        onClose={() => setIsWorkspaceOpen(false)}
-      />
+      {/* Header with brand identity and contact links. */}
+      <Header />
 
       <main className="flex-1 relative z-10">
         {/* Compact homepage: Jeep, location, navigation and photo album. */}
