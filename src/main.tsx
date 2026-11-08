@@ -1,18 +1,13 @@
-// Demo Key Quota Defense Tier 1 listener
-(window as unknown as { gm_authFailure?: () => void }).gm_authFailure = () => {
-  window.dispatchEvent(new CustomEvent('gmp-quota-exceeded'));
-};
-const origError = console.error;
-console.error = (...args: unknown[]) => {
-  origError.apply(console, args);
-  const msg = args.map((a) => String(a)).join(' ');
-  if (msg.includes('OverQuotaMapError') || msg.includes('QuotaExceededError')) {
-    window.dispatchEvent(new CustomEvent('gmp-quota-exceeded'));
-  }
-};
-
 import {createRoot} from 'react-dom/client';
+import { lazy, Suspense } from 'react';
 import App from './App.tsx';
 import './index.css';
 
-createRoot(document.getElementById('root')!).render(<App />);
+const AdminAccess = lazy(() => import('./components/AdminAccess'));
+const isAdministration = window.location.pathname.replace(/\/$/, '') === '/administracion';
+
+createRoot(document.getElementById('root')!).render(
+  isAdministration
+    ? <Suspense fallback={<p>Verificando acceso…</p>}><AdminAccess /></Suspense>
+    : <App />
+);
