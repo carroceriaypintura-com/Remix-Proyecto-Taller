@@ -7,8 +7,6 @@ import {
   Share2,
   Play,
   Image as ImageIcon,
-  Heart,
-  MessageSquare,
   Instagram,
   Facebook,
   PlusCircle,
@@ -19,20 +17,10 @@ import {
   ChevronLeft,
   ChevronRight,
   Filter,
+  Camera,
 } from 'lucide-react';
 import { Language } from '../types';
-import { BUSINESS_INFO } from '../data/content';
-
-// Import real workshop social photos
-import imgGmc from '../assets/images/real/work-gmc.jpg';
-import imgPintura from '../assets/images/real/work-pintura.jpg';
-import imgPulido from '../assets/images/real/work-pulido.jpg';
-import imgHonda from '../assets/images/real/work-honda.jpg';
-import imgDefensa from '../assets/images/real/work-defensa.jpg';
-import imgPickupProceso from '../assets/images/real/work-pickup-proceso.jpg';
-import imgFachada from '../assets/images/real/work-fachada.jpg';
-import imgTaller from '../assets/images/real/work-taller.jpg';
-import imgEquipo from '../assets/images/real/work-equipo.webp';
+import { BUSINESS_INFO, REAL_WORK_PHOTOS } from '../data/content';
 
 interface SocialShowcaseProps {
   lang: Language;
@@ -48,153 +36,35 @@ const FB_POST_IFRAME_SRC =
   'https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2FAutoDetalladoGenesis%2Fposts%2Fpfbid0faUof5oWSX15UuwhQvLkod2td7CvTjhsekY4ss3geFg4YrZEjiQFxshchbS8KBBYl&show_text=true&width=500';
 
 type MediaType = 'feed' | 'reel' | 'post';
-type PlatformFilter = 'all' | 'facebook' | 'instagram';
+type PlatformFilter = 'all' | 'workshop' | 'facebook' | 'instagram';
 
 export interface SocialPostItem {
   id: string;
   image: string;
-  platform: 'facebook' | 'instagram';
+  platform: 'workshop' | 'facebook' | 'instagram';
   channelName: string;
   channelUrl: string;
   titleEs: string;
   titleEn: string;
   captionEs: string;
   captionEn: string;
-  likes: number;
-  comments: number;
   tag: string;
   isUserAdded?: boolean;
 }
 
-// Built-in verified social media feed posts from official accounts
-const INITIAL_SOCIAL_FEED_POSTS: SocialPostItem[] = [
-  {
-    id: 'social-1',
-    image: imgGmc,
-    platform: 'facebook',
-    channelName: 'Auto Detallado Genesis',
-    channelUrl: 'https://www.facebook.com/AutoDetalladoGenesis',
-    titleEs: 'GMC Sierra Acabado Espejo 9H',
-    titleEn: 'GMC Sierra 9H Mirror Finish',
-    captionEs: 'Sierra recién entregada tras corrección de pintura en 3 pasos y recubrimiento cerámico 9H en Los Encinos. ¡Miren el reflejo de espejo de las lonas rojas de Génesis!',
-    captionEn: 'Freshly delivered Sierra after 3-step paint correction and 9H ceramic coating in Los Encinos. Check out the crisp reflection!',
-    likes: 142,
-    comments: 24,
-    tag: '#DetalladoGenesis #NogalesSonora',
-  },
-  {
-    id: 'social-2',
-    image: imgPintura,
-    platform: 'instagram',
-    channelName: '@carroceria_pintura_genecis',
-    channelUrl: 'https://www.instagram.com/carroceria_pintura_genecis',
-    titleEs: 'Pintura Automotriz en Cabina de Horneado',
-    titleEn: 'Automotive Paint in Oven Booth',
-    captionEs: 'Proceso de aplicación de barniz de alto brillo y curado térmico al horno. Cero impurezas, máxima adherencia y garantía por escrito.',
-    captionEn: 'High-gloss clear coat application and thermal oven baking. Zero airborne dust, maximum adhesion and written warranty.',
-    likes: 118,
-    comments: 19,
-    tag: '#CabinaAlHorno #PinturaAutomotriz',
-  },
-  {
-    id: 'social-3',
-    image: imgPulido,
-    platform: 'facebook',
-    channelName: 'Auto Detallado Genesis',
-    channelUrl: 'https://www.facebook.com/AutoDetalladoGenesis',
-    titleEs: 'Técnico Especialista en Pulido Rupes',
-    titleEn: 'Master Polishing with Rupes Tools',
-    captionEs: 'Trabajando el cofre de una Explorer negra con máquina orbital Rupes Bigfoot. Eliminación de remolinos (swirls) y micro-rayones al 95%.',
-    captionEn: 'Working on a black Explorer hood with Rupes Bigfoot orbital polisher. Removing 95% of paint swirls and micro scratches.',
-    likes: 96,
-    comments: 12,
-    tag: '#RupesBigfoot #CorreccionDePintura',
-  },
-  {
-    id: 'social-4',
-    image: imgHonda,
-    platform: 'instagram',
-    channelName: '@carroceria_pintura_genecis',
-    channelUrl: 'https://www.instagram.com/carroceria_pintura_genecis',
-    titleEs: 'Hojalatería y Cuadratura Honda Civic',
-    titleEn: 'Collision Repair Honda Civic',
-    captionEs: 'Reparación de impacto lateral y cuadratura de líneas milimétricas. Todo preparado para entrar a pintura.',
-    captionEn: 'Side collision repair and panel alignment back to factory specs. Prepped for oven booth paint.',
-    likes: 134,
-    comments: 21,
-    tag: '#HojalateriaNogales #Enderezado',
-  },
-  {
-    id: 'social-5',
-    image: imgDefensa,
-    platform: 'facebook',
-    channelName: 'Auto Detallado Genesis',
-    channelUrl: 'https://www.facebook.com/AutoDetalladoGenesis',
-    titleEs: 'Reconstrucción de Fascia y Pintura',
-    titleEn: 'Bumper Repair & OEM Paint Match',
-    captionEs: 'Reparación plástica con termofusión y pintura igualada por código original de agencia. Ahorro garantizado sin cambiar la pieza original.',
-    captionEn: 'Plastic thermo-weld bumper repair and exact factory color matching. Restored without buying aftermarket parts.',
-    likes: 89,
-    comments: 15,
-    tag: '#ReparacionDeFascias #AhorroGarantizado',
-  },
-  {
-    id: 'social-6',
-    image: imgPickupProceso,
-    platform: 'instagram',
-    channelName: '@carroceria_pintura_genecis',
-    channelUrl: 'https://www.instagram.com/carroceria_pintura_genecis',
-    titleEs: 'Proyecto Troca en Proceso Integral',
-    titleEn: 'Truck Project in Full Restoration',
-    captionEs: 'Restauración completa de carrocería: lámina desabollada, fondo epóxico anticorrosivo y detallado a fondo.',
-    captionEn: 'Full body restoration: dent removal, epoxy primer rust protection, and deep detailing.',
-    likes: 167,
-    comments: 28,
-    tag: '#TrocasNogales #Restauracion',
-  },
-  {
-    id: 'social-7',
-    image: imgFachada,
-    platform: 'facebook',
-    channelName: 'Auto Detallado Genesis',
-    channelUrl: 'https://www.facebook.com/AutoDetalladoGenesis',
-    titleEs: 'Nuestras Instalaciones en Los Encinos',
-    titleEn: 'Our Facility in Los Encinos',
-    captionEs: 'Visítanos en José Zazueta #16 con área techada, seguridad y equipo de diagnóstico para tu vehículo.',
-    captionEn: 'Visit us at José Zazueta #16 with covered work bays, security and diagnostic tools for your car.',
-    likes: 155,
-    comments: 17,
-    tag: '#LosEncinos #TallerNogales',
-  },
-  {
-    id: 'social-8',
-    image: imgTaller,
-    platform: 'facebook',
-    channelName: 'Auto Detallado Genesis',
-    channelUrl: 'https://www.facebook.com/AutoDetalladoGenesis',
-    titleEs: 'El Taller en Operación Continua',
-    titleEn: 'Workshop In Daily Operations',
-    captionEs: 'Varios proyectos en proceso simultáneo: hojalatería, preparación, pintura y detallado de entrega.',
-    captionEn: 'Multiple concurrent projects: collision straightening, prep, painting and final delivery detailing.',
-    likes: 121,
-    comments: 14,
-    tag: '#TrabajoDiario #EquipoGenesis',
-  },
-  {
-    id: 'social-9',
-    image: imgEquipo,
-    platform: 'instagram',
-    channelName: '@carroceria_pintura_genecis',
-    channelUrl: 'https://www.instagram.com/carroceria_pintura_genecis',
-    titleEs: 'Materiales & Compuestos Profesionales',
-    titleEn: 'Professional Compounds & Materials',
-    captionEs: 'Únicamente usamos pulimentos base agua, pads de microfibra y cerámicas de grado profesional.',
-    captionEn: 'We only use water-based polishing compounds, microfiber pads and pro-grade ceramic formulas.',
-    likes: 110,
-    comments: 11,
-    tag: '#MaterialesDeCalidad #DetalladoPro',
-  },
-];
+// Owner-supplied photographs, not a fetched social feed or verified social posts.
+const INITIAL_SOCIAL_FEED_POSTS: SocialPostItem[] = REAL_WORK_PHOTOS.map((photo) => ({
+  id: photo.id,
+  image: photo.src,
+  platform: 'workshop',
+  channelName: 'Fotos del taller',
+  channelUrl: BUSINESS_INFO.social.facebook,
+  titleEs: photo.title,
+  titleEn: photo.titleEn,
+  captionEs: photo.desc,
+  captionEn: photo.descEn,
+  tag: '#FotosReales',
+}));
 
 export default function SocialShowcase({ lang }: SocialShowcaseProps) {
   const [activeMedia, setActiveMedia] = useState<MediaType>('feed');
@@ -263,8 +133,6 @@ export default function SocialShowcase({ lang }: SocialShowcaseProps) {
       titleEn: newTitle.trim() || 'New Social Photo',
       captionEs: newCaption.trim() || (lang === 'es' ? 'Publicación compartida de nuestras redes sociales.' : 'Shared post from our official channels.'),
       captionEn: newCaption.trim() || 'Shared post from our official channels.',
-      likes: Math.floor(Math.random() * 50) + 40,
-      comments: Math.floor(Math.random() * 15) + 5,
       tag: newTag.trim() || (newPlatform === 'facebook' ? '#AutoDetalladoGenesis' : '#carroceria_pintura_genecis'),
       isUserAdded: true,
     };
@@ -308,11 +176,11 @@ export default function SocialShowcase({ lang }: SocialShowcaseProps) {
 
   const content = {
     es: {
-      badge: 'Redes Sociales & Evidencia en Vivo',
-      title: 'Fotos y Videos Directos de Nuestras Redes',
+      badge: 'Fotos Reales & Redes Sociales',
+      title: 'Fotos Reales de Nuestro Taller',
       subtitle:
-        'Sigue nuestras publicaciones diarias en Facebook (@AutoDetalladoGenesis) e Instagram (@carroceria_pintura_genecis). Mira fotos reales o agrega imágenes de nuestras redes.',
-      tabFeed: 'Galería de Redes',
+        'Estas fotografías fueron compartidas directamente por el taller. También puedes visitar nuestros perfiles de Facebook e Instagram.',
+      tabFeed: 'Fotos del Taller',
       tabReel: 'Video Reel de Facebook',
       tabPost: 'Publicación de Facebook',
       addBtn: 'Agregar Foto de Mis Redes',
@@ -322,11 +190,11 @@ export default function SocialShowcase({ lang }: SocialShowcaseProps) {
       quoteBtn: 'Cotizar Trabajo Similar por WhatsApp',
     },
     en: {
-      badge: 'Social Networks & Live Evidence',
-      title: 'Photos & Videos Straight From Our Social Media',
+      badge: 'Real Photos & Social Media',
+      title: 'Real Workshop Photos',
       subtitle:
-        'Follow our daily craftsmanship on Facebook (@AutoDetalladoGenesis) and Instagram (@carroceria_pintura_genecis). View unedited photos or add new social pictures.',
-      tabFeed: 'Social Feed Gallery',
+        'These original photographs were shared directly by the workshop. You can also visit our Facebook and Instagram profiles.',
+      tabFeed: 'Workshop Photos',
       tabReel: 'Facebook Video Reel',
       tabPost: 'Official Facebook Post',
       addBtn: 'Add Social Media Photo',
@@ -433,6 +301,14 @@ export default function SocialShowcase({ lang }: SocialShowcaseProps) {
 
                 <button
                   type="button"
+                  onClick={() => setPlatformFilter('workshop')}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold cursor-pointer ${platformFilter === 'workshop' ? 'bg-amber-500 text-black' : 'text-neutral-400 hover:text-white'}`}
+                >
+                  {lang === 'es' ? 'Taller' : 'Workshop'}
+                </button>
+
+                <button
+                  type="button"
                   onClick={() => setPlatformFilter('facebook')}
                   className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
                     platformFilter === 'facebook'
@@ -469,6 +345,12 @@ export default function SocialShowcase({ lang }: SocialShowcaseProps) {
               </button>
             </div>
 
+            {filteredPosts.length === 0 && (
+              <p className="text-center text-sm text-neutral-300 py-6">
+                {lang === 'es' ? 'No hay fotos agregadas de este canal. Selecciona Todas las Fotos para ver las fotos del taller.' : 'No photos added for this channel. Select All Photos to see the workshop photos.'}
+              </p>
+            )}
+
             {/* Posts Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredPosts.map((post, idx) => (
@@ -481,7 +363,9 @@ export default function SocialShowcase({ lang }: SocialShowcaseProps) {
                     {/* Post Top Channel Header */}
                     <div className="p-3.5 flex items-center justify-between border-b border-white/5 bg-[#14161f]">
                       <div className="flex items-center gap-2">
-                        {post.platform === 'facebook' ? (
+                        {post.platform === 'workshop' ? (
+                          <Camera className="w-6 h-6 text-amber-400" />
+                        ) : post.platform === 'facebook' ? (
                           <div className="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xs shadow-sm">
                             f
                           </div>
@@ -533,8 +417,9 @@ export default function SocialShowcase({ lang }: SocialShowcaseProps) {
                     <div className="relative aspect-[4/3] bg-black overflow-hidden">
                       <img
                         src={post.image}
+                        loading="lazy"
                         alt={post.titleEs}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
                         referrerPolicy="no-referrer"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-[#1a1d26]/85 via-transparent to-transparent opacity-60" />
@@ -544,17 +429,6 @@ export default function SocialShowcase({ lang }: SocialShowcaseProps) {
                         <ZoomIn className="w-3.5 h-3.5" />
                       </div>
 
-                      {/* Social Reaction Badge */}
-                      <div className="absolute bottom-2.5 left-3 flex items-center gap-3 text-white text-[11px] font-semibold bg-black/65 px-2.5 py-1 rounded-full backdrop-blur-sm border border-white/10">
-                        <span className="flex items-center gap-1 text-rose-400">
-                          <Heart className="w-3.5 h-3.5 fill-rose-500 text-rose-500" />
-                          <span>{post.likes}</span>
-                        </span>
-                        <span className="flex items-center gap-1 text-neutral-300">
-                          <MessageSquare className="w-3.5 h-3.5" />
-                          <span>{post.comments}</span>
-                        </span>
-                      </div>
                     </div>
 
                     {/* Post Caption */}
@@ -573,8 +447,8 @@ export default function SocialShowcase({ lang }: SocialShowcaseProps) {
                     <a
                       href={`https://wa.me/${BUSINESS_INFO.whatsappNumber}?text=${encodeURIComponent(
                         lang === 'es'
-                          ? `Hola Carrocería y Pintura Nogales, vi en sus redes el trabajo de "${post.titleEs}" y me gustaría cotizar para mi vehículo.`
-                          : `Hello, I saw your social media post about "${post.titleEn}" and would like a quote.`
+                          ? `Hola Carrocería y Pintura Nogales, vi en su galería la foto de "${post.titleEs}" y me gustaría cotizar para mi vehículo.`
+                          : `Hello, I saw your gallery photo of "${post.titleEn}" and would like a quote.`
                       )}`}
                       target="_blank"
                       rel="noopener noreferrer"
@@ -975,7 +849,9 @@ export default function SocialShowcase({ lang }: SocialShowcaseProps) {
             <div className="md:w-2/5 p-6 flex flex-col justify-between overflow-y-auto bg-[#141620]">
               <div className="space-y-4">
                 <div className="flex items-center gap-2">
-                  {filteredPosts[activeLightboxIndex].platform === 'facebook' ? (
+                  {filteredPosts[activeLightboxIndex].platform === 'workshop' ? (
+                    <Camera className="w-6 h-6 text-amber-400" />
+                  ) : filteredPosts[activeLightboxIndex].platform === 'facebook' ? (
                     <div className="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xs">
                       f
                     </div>
@@ -1006,16 +882,6 @@ export default function SocialShowcase({ lang }: SocialShowcaseProps) {
                     : filteredPosts[activeLightboxIndex].captionEn}
                 </p>
 
-                <div className="flex items-center gap-4 text-xs font-semibold text-neutral-300 pt-2 border-t border-white/5">
-                  <span className="flex items-center gap-1.5 text-rose-400">
-                    <Heart className="w-4 h-4 fill-rose-500 text-rose-500" />
-                    <span>{filteredPosts[activeLightboxIndex].likes} likes</span>
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <MessageSquare className="w-4 h-4 text-neutral-400" />
-                    <span>{filteredPosts[activeLightboxIndex].comments} comentarios</span>
-                  </span>
-                </div>
               </div>
 
               <div className="pt-6 space-y-2 border-t border-white/5 mt-6">
@@ -1040,7 +906,9 @@ export default function SocialShowcase({ lang }: SocialShowcaseProps) {
                   className="w-full inline-flex items-center justify-center gap-2 py-2 px-4 rounded-xl bg-white/5 hover:bg-white/10 text-neutral-300 hover:text-white font-medium text-xs transition-colors"
                 >
                   <ExternalLink className="w-3.5 h-3.5" />
-                  <span>{lang === 'es' ? 'Ver en Red Social Original' : 'Open in Original Social Media'}</span>
+                  <span>{filteredPosts[activeLightboxIndex].platform === 'workshop'
+                    ? (lang === 'es' ? 'Visitar Facebook del taller' : 'Visit workshop Facebook')
+                    : (lang === 'es' ? 'Ver en Red Social Original' : 'Open in Original Social Media')}</span>
                 </a>
               </div>
             </div>

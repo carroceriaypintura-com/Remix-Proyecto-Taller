@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Camera, X, ZoomIn, ArrowRight, ChevronLeft, ChevronRight, Images, MessageCircle } from 'lucide-react';
 import { Language } from '../types';
 import { REAL_WORK_PHOTOS, BUSINESS_INFO } from '../data/content';
@@ -23,12 +24,12 @@ export default function RealGallery({ lang }: RealGalleryProps) {
   };
 
   const categories = [
-    { id: 'all', nameEs: 'Todos (9 Trabajos)', nameEn: 'All (9 Works)' },
-    { id: 'Detallado', nameEs: 'Acabados Espejo', nameEn: 'Mirror Finish' },
-    { id: 'Pulido', nameEs: 'Pulido Profesional', nameEn: 'Pro Polishing' },
-    { id: 'Pintura', nameEs: 'Pintura al Horno', nameEn: 'Spray Booth' },
-    { id: 'Carrocería', nameEs: 'Carrocería & Lámina', nameEn: 'Body & Panels' },
-    { id: 'Taller', nameEs: 'Instalaciones', nameEn: 'Shop Facility' },
+    { id: 'all', nameEs: `Todas (${REAL_WORK_PHOTOS.length} fotos)`, nameEn: `All (${REAL_WORK_PHOTOS.length} photos)` },
+    { id: 'Carrocería', nameEs: 'Carrocería', nameEn: 'Bodywork' },
+    { id: 'Vehículos', nameEs: 'Vehículos', nameEn: 'Vehicles' },
+    { id: 'Taller', nameEs: 'Taller', nameEn: 'Workshop' },
+    { id: 'Pulido', nameEs: 'Pulido', nameEn: 'Polishing' },
+    { id: 'Equipo', nameEs: 'Equipo', nameEn: 'Equipment' },
   ];
 
   const filteredPhotos = activeFilter === 'all'
@@ -71,8 +72,8 @@ export default function RealGallery({ lang }: RealGalleryProps) {
             </h2>
             <p className="text-xs sm:text-sm text-neutral-300 mt-1.5">
               {lang === 'es'
-                ? 'Fotografías directas de nuestros trabajos en Nogales: hojalatería, horneado y acabados espejo.'
-                : 'Direct unedited photos of our collision repairs, paint booth finishes, and mirror gloss in Nogales.'}
+                ? 'Fotografías reales de vehículos y de nuestro taller, compartidas por nosotros.'
+                : 'Original vehicle and workshop photographs shared by our team.'}
             </p>
           </div>
 
@@ -134,8 +135,9 @@ export default function RealGallery({ lang }: RealGalleryProps) {
                 <div className="relative aspect-[4/3] overflow-hidden bg-[#12141c]">
                   <img
                     src={photo.src}
+                    loading="lazy"
                     alt={photo.title}
-                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                    className="w-full h-full object-contain object-center group-hover:scale-105 transition-transform duration-500"
                     referrerPolicy="no-referrer"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#12141c] via-transparent to-transparent opacity-80 group-hover:opacity-60 transition-opacity" />
@@ -168,9 +170,9 @@ export default function RealGallery({ lang }: RealGalleryProps) {
         </div>
 
         {/* Full Gallery Lightbox Modal */}
-        {modalOpen && (
+        {modalOpen && createPortal(
           <div
-            className="fixed inset-0 z-50 bg-[#12141c]/95 flex items-center justify-center p-3 sm:p-6"
+            className="fixed inset-0 z-[60] bg-[#12141c]/95 flex items-center justify-center p-3 sm:p-6"
             onClick={() => setModalOpen(false)}
           >
             <div
@@ -253,7 +255,7 @@ export default function RealGallery({ lang }: RealGalleryProps) {
               </div>
             </div>
           </div>
-        )}
+        , document.body)}
 
       </div>
     </section>
