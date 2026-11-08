@@ -1,4 +1,4 @@
-import { ArrowRight, Wrench, Flame, Sparkles, Shield, Car, Check, Clock, ShieldCheck } from 'lucide-react';
+import { ArrowRight, MessageCircle, ChevronDown, Wrench, Flame, Sparkles, Shield, Car, Check, Clock, ShieldCheck } from 'lucide-react';
 import { Language } from '../types';
 import { SERVICES_LIST, BUSINESS_INFO } from '../data/content';
 import { useScrollReveal } from '../hooks/useScrollReveal';
@@ -8,6 +8,7 @@ interface ServicesGridProps {
 }
 
 export default function ServicesGrid({ lang }: ServicesGridProps) {
+  const colors = ['action-amber', 'action-rose', 'action-purple', 'action-blue', 'action-green', 'action-amber'];
   const icons = [Wrench, Flame, Sparkles, Shield, Car, Check];
   const { ref: headerRef, isVisible: headerVisible } = useScrollReveal();
   const { ref: gridRef, isVisible: gridVisible } = useScrollReveal({ threshold: 0.1 });
@@ -18,13 +19,13 @@ export default function ServicesGrid({ lang }: ServicesGridProps) {
   };
 
   return (
-    <section id="servicios" className="py-16 sm:py-24 bg-[#12141c] border-b border-white/5 relative">
+    <section id="servicios" className="py-8 sm:py-12 bg-[#12141c] border-b border-white/5 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header with Scroll Reveal */}
         <div
           ref={headerRef}
-          className={`max-w-3xl mb-12 transition-all duration-700 ease-out ${
+          className={`max-w-3xl mb-5 transition-all duration-700 ease-out ${
             headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}
         >
@@ -45,7 +46,7 @@ export default function ServicesGrid({ lang }: ServicesGridProps) {
         {/* 3-Column Services Grid with Staggered Scroll Reveal */}
         <div
           ref={gridRef}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3"
         >
           {SERVICES_LIST.map((srv, idx) => {
             const IconComponent = icons[idx % icons.length];
@@ -55,7 +56,7 @@ export default function ServicesGrid({ lang }: ServicesGridProps) {
             return (
               <div
                 key={srv.number}
-                className={`group relative bg-[#1a1d26] hover:bg-[#202430] border border-white/5 hover:border-amber-500/30 rounded-2xl p-6 sm:p-7 flex flex-col justify-between shadow-sm hover:shadow-md transition-all duration-700 ease-out ${delayClass} ${
+                className={`group relative bg-[#1a1d26] hover:bg-[#202430] border border-white/5 hover:border-amber-500/30 rounded-2xl p-4 sm:p-5 flex flex-col justify-between shadow-sm hover:shadow-md transition-all duration-700 ease-out ${delayClass} ${
                   gridVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-12 scale-[0.97]'
                 }`}
               >
@@ -72,7 +73,7 @@ export default function ServicesGrid({ lang }: ServicesGridProps) {
                   </div>
 
                   {/* Icon */}
-                  <div className="w-12 h-12 rounded-2xl bg-[#12141c] border border-white/5 flex items-center justify-center text-amber-500 mb-5 shadow-inner group-hover:scale-105 group-hover:border-amber-500/30 transition-all">
+                  <div className={`action-pill !w-11 !p-0 mb-3 ${colors[idx]}`}>
                     <IconComponent className="w-5 h-5" />
                   </div>
 
@@ -81,9 +82,10 @@ export default function ServicesGrid({ lang }: ServicesGridProps) {
                     {lang === 'es' ? srv.title : srv.titleEn}
                   </h3>
 
-                  <p className="text-xs sm:text-sm text-neutral-300 leading-relaxed mb-6">
-                    {lang === 'es' ? srv.desc : srv.descEn}
-                  </p>
+                  <details className="text-sm text-neutral-300 mb-3">
+                    <summary className={`action-pill ${colors[idx]} !text-xs cursor-pointer`}><ChevronDown aria-hidden="true" />{lang === 'es' ? 'Ver detalles' : 'View details'}</summary>
+                    <p className="pt-3 text-xs leading-relaxed">{lang === 'es' ? srv.desc : srv.descEn}</p>
+                  </details>
                 </div>
 
                 {/* Footer with Warranty & WhatsApp CTA */}
@@ -101,9 +103,9 @@ export default function ServicesGrid({ lang }: ServicesGridProps) {
                     )}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-[#12141c] hover:bg-amber-500 text-neutral-200 hover:text-neutral-950 border border-white/5 hover:border-amber-500 font-bold text-xs transition-all shadow-sm group/btn cursor-pointer"
+                    className="action-pill action-green w-full"
                   >
-                    <span>{lang === 'es' ? 'Cotizar Servicio por WhatsApp' : 'Quote via WhatsApp'}</span>
+                    <MessageCircle aria-hidden="true" /><span>{lang === 'es' ? 'Cotizar por WhatsApp' : 'Quote via WhatsApp'}</span>
                     <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-1 transition-transform" />
                   </a>
                 </div>

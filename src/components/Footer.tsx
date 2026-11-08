@@ -1,3 +1,4 @@
+import { Wrench, Images, Calculator, MapPin, MessageCircle } from 'lucide-react';
 import { Language } from '../types';
 import { BUSINESS_INFO } from '../data/content';
 
@@ -29,35 +30,39 @@ export default function Footer({ lang }: FooterProps) {
           <div className="flex flex-wrap items-center gap-2.5">
             <a
               href="#servicios"
-              className="px-3.5 py-1.5 rounded-full bg-[#1a1d26] hover:bg-[#202430] text-neutral-300 hover:text-white border border-white/5 transition-colors text-xs"
+              className="action-pill action-amber"
             >
+              <Wrench aria-hidden="true" />
               {lang === 'es' ? 'Servicios' : 'Services'}
             </a>
             <a
               href="#galeria"
-              className="px-3.5 py-1.5 rounded-full bg-[#1a1d26] hover:bg-[#202430] text-neutral-300 hover:text-white border border-white/5 transition-colors text-xs"
+              className="action-pill action-purple"
             >
+              <Images aria-hidden="true" />
               {lang === 'es' ? 'Galería' : 'Gallery'}
             </a>
             <a
               href="#cotizador"
-              className="px-3.5 py-1.5 rounded-full bg-[#1a1d26] hover:bg-[#202430] text-neutral-300 hover:text-white border border-white/5 transition-colors text-xs"
+              className="action-pill action-blue"
             >
+              <Calculator aria-hidden="true" />
               {lang === 'es' ? 'Cotizador' : 'Estimator'}
             </a>
             <a
               href="#ubicacion"
-              className="px-3.5 py-1.5 rounded-full bg-[#1a1d26] hover:bg-[#202430] text-neutral-300 hover:text-white border border-white/5 transition-colors text-xs"
+              className="action-pill action-rose"
             >
+              <MapPin aria-hidden="true" />
               {lang === 'es' ? 'Ubicación' : 'Location'}
             </a>
             <a
               href={`https://wa.me/${BUSINESS_INFO.whatsappNumber}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 hover:bg-amber-500 hover:text-neutral-950 font-bold transition-all text-xs"
+              className="action-pill action-green"
             >
-              WhatsApp
+              <MessageCircle aria-hidden="true" />WhatsApp
             </a>
           </div>
         </div>
