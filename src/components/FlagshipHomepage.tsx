@@ -8,14 +8,13 @@ export default function FlagshipHomepage() {
         <div className="space-y-4">
           <p className="text-xs font-semibold tracking-widest text-amber-300 uppercase">Carrocería · Pintura · Detallado</p>
           <h1 id="home-title" className="font-serif-luxury text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight">Brillo que se nota.<br />Trabajo que responde.</h1>
-          <p className="text-sm text-neutral-300">Tu taller en Los Encinos, Nogales. Fotos reales, atención directa.</p>
+          <p className="text-sm text-neutral-300">Tu taller en Los Encinos, Nogales.</p>
           <a href={`${BUSINESS_INFO.social.whatsapp}?text=${encodeURIComponent('Hola, me gustaría cotizar una reparación para mi auto.')}`} target="_blank" rel="noopener noreferrer" className="action-pill action-green">
             <MessageCircle aria-hidden="true" />Cotiza por WhatsApp
           </a>
         </div>
         <figure className="rounded-2xl overflow-hidden border border-white/15 bg-black">
           <img src={FEATURED_WORK_PHOTO.src} alt={FEATURED_WORK_PHOTO.title} fetchPriority="high" className="w-full h-[300px] sm:h-[420px] lg:h-[440px] object-contain" />
-          <figcaption className="px-4 py-2 text-xs text-neutral-300">Jeep con el cofre abierto · Nuestro taller</figcaption>
         </figure>
       </section>
 

@@ -49,7 +49,6 @@ export default function RealGallery({ lang }: { lang: Language }) {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
           <div>
             <h2 className="text-2xl sm:text-3xl font-bold">{lang === 'es' ? 'Álbum de trabajos' : 'Workshop album'}</h2>
-            <p className="text-sm text-neutral-400 mt-1">{lang === 'es' ? 'Tres fotos destacadas. Todas son de nuestro taller.' : 'Three highlights. All photos are from our workshop.'}</p>
           </div>
           <button type="button" onClick={() => { setActive(null); setOpen(true); }} className="action-pill action-purple">
             <Images aria-hidden="true" />{lang === 'es' ? `Abrir biblioteca (${REAL_WORK_PHOTOS.length} fotos)` : `Open library (${REAL_WORK_PHOTOS.length} photos)`}
