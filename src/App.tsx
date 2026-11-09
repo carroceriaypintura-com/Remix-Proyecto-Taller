@@ -6,6 +6,7 @@ import Header from './components/Header';
 import FlagshipHomepage from './components/FlagshipHomepage';
 import ServicesGrid from './components/ServicesGrid';
 import RealGallery from './components/RealGallery';
+import WorkshopVideos from './components/WorkshopVideos';
 import SocialShowcase from './components/SocialShowcase';
 import QuoteEstimator from './components/QuoteEstimator';
 import LocationContact from './components/LocationContact';
@@ -29,6 +30,7 @@ export default function App() {
         <FlagshipHomepage />
 
         <RealGallery lang={lang} />
+        <WorkshopVideos lang={lang} />
         <ServicesGrid lang={lang} />
         <div className="max-w-7xl mx-auto px-4 py-4">
           <details className="rounded-2xl border border-white/10 bg-[#10141d]">
