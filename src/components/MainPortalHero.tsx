@@ -308,7 +308,7 @@ export default function MainPortalHero({ lang, onToggleLang }: MainPortalHeroPro
                     Instagram Oficial
                   </div>
                   <div className="text-[11px] text-neutral-400">
-                    @carroceria_pintura_genecis
+                    @carroceria_pintura_genesis
                   </div>
                 </div>
               </div>

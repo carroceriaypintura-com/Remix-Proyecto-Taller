@@ -16,7 +16,7 @@ export const BUSINESS_INFO = {
   googleMapsEmbed: '/locator.html',
   social: {
     facebook: 'https://www.facebook.com/AutoDetalladoGenesis',
-    instagram: 'https://www.instagram.com/carroceria_pintura_genecis',
+    instagram: 'https://www.instagram.com/carroceria_pintura_genesis',
     twitter: 'https://x.com/Carroceria_Nog',
     whatsapp: 'https://wa.me/526311322616',
   },
