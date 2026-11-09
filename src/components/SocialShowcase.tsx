@@ -116,12 +116,12 @@ export default function SocialShowcase({ lang }: SocialShowcaseProps) {
     if (!newImageUrl.trim()) return;
 
     const channelName =
-      newPlatform === 'facebook' ? 'Auto Detallado Genesis' : '@carroceria_pintura_genecis';
+      newPlatform === 'facebook' ? 'Auto Detallado Genesis' : '@carroceria_pintura_genesis';
     const channelUrl =
       newPostUrl.trim() ||
       (newPlatform === 'facebook'
         ? 'https://www.facebook.com/AutoDetalladoGenesis'
-        : 'https://www.instagram.com/carroceria_pintura_genecis');
+        : 'https://www.instagram.com/carroceria_pintura_genesis');
 
     const newPost: SocialPostItem = {
       id: `custom-${Date.now()}`,
@@ -133,7 +133,7 @@ export default function SocialShowcase({ lang }: SocialShowcaseProps) {
       titleEn: newTitle.trim() || 'New Social Photo',
       captionEs: newCaption.trim() || (lang === 'es' ? 'Publicación compartida de nuestras redes sociales.' : 'Shared post from our official channels.'),
       captionEn: newCaption.trim() || 'Shared post from our official channels.',
-      tag: newTag.trim() || (newPlatform === 'facebook' ? '#AutoDetalladoGenesis' : '#carroceria_pintura_genecis'),
+      tag: newTag.trim() || (newPlatform === 'facebook' ? '#AutoDetalladoGenesis' : '#carroceria_pintura_genesis'),
       isUserAdded: true,
     };
 
@@ -186,7 +186,7 @@ export default function SocialShowcase({ lang }: SocialShowcaseProps) {
       addBtn: 'Agregar Foto de Mis Redes',
       filterAll: 'Todas las Fotos',
       filterFb: 'Facebook (@AutoDetalladoGenesis)',
-      filterIg: 'Instagram (@carroceria_pintura_genecis)',
+      filterIg: 'Instagram (@carroceria_pintura_genesis)',
       quoteBtn: 'Cotizar Trabajo Similar por WhatsApp',
     },
     en: {
@@ -200,7 +200,7 @@ export default function SocialShowcase({ lang }: SocialShowcaseProps) {
       addBtn: 'Add Social Media Photo',
       filterAll: 'All Photos',
       filterFb: 'Facebook (@AutoDetalladoGenesis)',
-      filterIg: 'Instagram (@carroceria_pintura_genecis)',
+      filterIg: 'Instagram (@carroceria_pintura_genesis)',
       quoteBtn: 'Quote Similar Work via WhatsApp',
     },
   }[lang];
@@ -482,7 +482,7 @@ export default function SocialShowcase({ lang }: SocialShowcaseProps) {
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-amber-600 via-rose-600 to-purple-600 hover:opacity-90 text-white font-bold text-xs shadow-md transition-all hover:scale-105"
               >
                 <Instagram className="w-4 h-4" />
-                <span>Instagram: @carroceria_pintura_genecis</span>
+                <span>Instagram: @carroceria_pintura_genesis</span>
               </a>
             </div>
           </div>

@@ -473,7 +473,7 @@ export default function LocationContact({ lang }: LocationContactProps) {
                 >
                   <div className="flex items-center gap-2.5">
                     <span className="w-6 h-6 rounded-lg bg-gradient-to-tr from-amber-600 via-rose-600 to-purple-600 text-white flex items-center justify-center font-bold text-[10px]">IG</span>
-                    <span>Instagram: @carroceria_pintura_genecis</span>
+                    <span>Instagram: @carroceria_pintura_genesis</span>
                   </div>
                   <ExternalLink className="w-3.5 h-3.5 text-neutral-400 group-hover:text-rose-400" />
                 </a>
