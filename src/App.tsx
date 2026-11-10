@@ -5,6 +5,7 @@ import { Language } from './types';
 import Header from './components/Header';
 import FlagshipHomepage from './components/FlagshipHomepage';
 import ServicesGrid from './components/ServicesGrid';
+import ReviewsSection from './components/ReviewsSection';
 import RealGallery from './components/RealGallery';
 import WorkshopVideos from './components/WorkshopVideos';
 import SocialShowcase from './components/SocialShowcase';
@@ -32,6 +33,7 @@ export default function App() {
         <RealGallery lang={lang} />
         <WorkshopVideos lang={lang} />
         <ServicesGrid lang={lang} />
+        <ReviewsSection lang={lang} />
         <div className="max-w-7xl mx-auto px-4 py-4">
           <details className="rounded-2xl border border-white/10 bg-[#10141d]">
             <summary className="action-pill action-purple m-3 cursor-pointer"><Play aria-hidden="true" />Videos y opciones de redes</summary>

@@ -1,6 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import {
   getAuth,
+  FacebookAuthProvider,
   GoogleAuthProvider,
   signInWithPopup,
   signOut,
@@ -35,6 +36,7 @@ export const db = getFirestore(app, firestoreDatabaseId);
 // Initialize Auth
 export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();
+export const facebookProvider = new FacebookAuthProvider();
 
 // Structured Firestore Error Handling as mandated by Firebase skill
 export enum OperationType {
@@ -127,6 +129,21 @@ export async function loginWithGoogle(): Promise<User> {
     console.error('Google Sign In error:', err);
     throw err;
   }
+}
+
+// Facebook Auth Helpers (for public reviews; same Firebase project as Google login)
+export async function loginWithFacebook(): Promise<User> {
+  try {
+    const result = await signInWithPopup(auth, facebookProvider);
+    return result.user;
+  } catch (err) {
+    console.error('Facebook Sign In error:', err);
+    throw err;
+  }
+}
+
+export function onAuthChange(callback: (user: User | null) => void): () => void {
+  return onAuthStateChanged(auth, callback);
 }
 
 export async function logoutUser(): Promise<void> {
