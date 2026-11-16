@@ -50,6 +50,9 @@ import {
   subscribeToQuotes,
   updateQuoteStatus,
   StoredQuote,
+  subscribeToWhatsappMessages,
+  updateWhatsappMessageStatus,
+  StoredWhatsappMessage,
 } from '../lib/firebase';
 
 interface GoogleWorkspaceHubProps {
@@ -91,6 +94,10 @@ export default function GoogleWorkspaceHub({ isOpen, onClose }: GoogleWorkspaceH
   // Firestore quotes state
   const [quotes, setQuotes] = useState<StoredQuote[]>([]);
   const [loadingQuotes, setLoadingQuotes] = useState(false);
+
+  // Firestore WhatsApp messages state
+  const [whatsappMessages, setWhatsappMessages] = useState<StoredWhatsappMessage[]>([]);
+  const [loadingWhatsapp, setLoadingWhatsapp] = useState(false);
 
   // Notifications & Confirmations (Mandatory for destructive/send operations)
   const [notification, setNotification] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
@@ -142,6 +149,27 @@ export default function GoogleWorkspaceHub({ isOpen, onClose }: GoogleWorkspaceH
       (err) => {
         console.warn('Firestore quotes:', err);
         setLoadingQuotes(false);
+      }
+    );
+    return () => unsub();
+  }, [user]);
+
+  // Subscribe to real-time WhatsApp messages from Firestore only when user is authenticated
+  useEffect(() => {
+    if (!user) {
+      setWhatsappMessages([]);
+      setLoadingWhatsapp(false);
+      return;
+    }
+    setLoadingWhatsapp(true);
+    const unsub = subscribeToWhatsappMessages(
+      (items) => {
+        setWhatsappMessages(items);
+        setLoadingWhatsapp(false);
+      },
+      (err) => {
+        console.warn('Firestore WhatsApp:', err);
+        setLoadingWhatsapp(false);
       }
     );
     return () => unsub();
@@ -1056,6 +1084,80 @@ export default function GoogleWorkspaceHub({ isOpen, onClose }: GoogleWorkspaceH
                             {st}
                           </button>
                         ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* WhatsApp messages */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-4 rounded-xl bg-[#121620] border border-white/10">
+                <div>
+                  <h4 className="text-sm font-bold text-white">Mensajes de WhatsApp</h4>
+                  <p className="text-xs text-neutral-400">
+                    Mensajes que llegan al número del taller, guardados automáticamente por el webhook de Meta.
+                  </p>
+                </div>
+                {user && (
+                  <div className="text-xs text-emerald-400 font-bold">
+                    {whatsappMessages.length} mensajes guardados
+                  </div>
+                )}
+              </div>
+
+              {!user ? null : loadingWhatsapp ? (
+                <div className="py-12 text-center text-xs text-neutral-400">Conectando con Firestore...</div>
+              ) : whatsappMessages.length === 0 ? (
+                <div className="py-10 text-center text-xs text-neutral-500 bg-[#121620] rounded-xl border border-dashed border-white/10">
+                  Aún no han llegado mensajes de WhatsApp. Cuando un cliente escriba al número del taller, aparecerán aquí automáticamente.
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[460px] overflow-y-auto">
+                  {whatsappMessages.map((m) => (
+                    <div
+                      key={m.id}
+                      className="p-4 rounded-xl bg-[#121620] border border-white/5 space-y-2.5 text-xs"
+                    >
+                      <div className="flex items-center justify-between border-b border-white/5 pb-2">
+                        <span className="font-bold text-white text-sm">📞 {m.from}</span>
+                        <span
+                          className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${
+                            m.status === 'nuevo'
+                              ? 'bg-blue-500/20 text-blue-400'
+                              : m.status === 'leido'
+                              ? 'bg-amber-500/20 text-amber-400'
+                              : 'bg-emerald-500/20 text-emerald-400'
+                          }`}
+                        >
+                          {m.status}
+                        </span>
+                      </div>
+
+                      <div className="p-2 rounded bg-[#181d2a] text-[11px] text-neutral-300">
+                        {m.text}
+                      </div>
+
+                      <div className="text-[11px] text-neutral-400">
+                        {new Date(m.timestamp * 1000).toLocaleString('es-MX', { dateStyle: 'short', timeStyle: 'short' })}
+                      </div>
+
+                      <div className="flex items-center gap-2 pt-1">
+                        <a
+                          href={`https://wa.me/${m.from}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="px-2 py-1 rounded bg-emerald-500/20 text-emerald-400 font-semibold text-[11px]"
+                        >
+                          Responder por WhatsApp
+                        </a>
+                        {m.status === 'nuevo' && (
+                          <button
+                            onClick={() => updateWhatsappMessageStatus(m.id, 'leido')}
+                            className="px-2 py-1 rounded bg-white/5 text-neutral-400 hover:text-white font-semibold text-[11px] cursor-pointer"
+                          >
+                            Marcar leído
+                          </button>
+                        )}
                       </div>
                     </div>
                   ))}
