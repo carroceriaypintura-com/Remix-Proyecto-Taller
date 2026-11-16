@@ -120,6 +120,20 @@ export interface StoredReview {
   createdAt: any;
 }
 
+// Mensaje entrante de WhatsApp guardado por el webhook de Meta.
+// `timestamp` es la hora del mensaje según Meta (segundos desde epoch);
+// `receivedAt` es cuando lo guardó el servidor.
+export interface StoredWhatsappMessage {
+  id: string;
+  wamid: string;
+  from: string;
+  type: string;
+  text: string;
+  timestamp: number;
+  status: 'nuevo' | 'leido' | 'contestado';
+  receivedAt: any;
+}
+
 // Google Auth Helpers
 export async function loginWithGoogle(): Promise<User> {
   try {
@@ -205,6 +219,33 @@ export async function updateQuoteStatus(quoteId: string, newStatus: StoredQuote[
     };
     if (adminNotes !== undefined) updatePayload.adminNotes = adminNotes;
     await updateDoc(doc(db, 'quotes', quoteId), updatePayload);
+  } catch (error) {
+    handleFirestoreError(error, OperationType.UPDATE, path);
+  }
+}
+
+export function subscribeToWhatsappMessages(onData: (messages: StoredWhatsappMessage[]) => void, onError?: (err: Error) => void) {
+  let disposed = false;
+  let unsubscribe = () => {};
+  requireAdministrator().then(() => {
+    if (disposed) return;
+    unsubscribe = onSnapshot(
+      query(collection(db, 'whatsapp_messages'), orderBy('timestamp', 'desc')),
+      snapshot => onData(snapshot.docs.map(item => item.data() as StoredWhatsappMessage)),
+      error => onError?.(error)
+    );
+  }).catch(error => { if (!disposed) { onData([]); onError?.(error); } });
+  return () => { disposed = true; unsubscribe(); };
+}
+
+export async function updateWhatsappMessageStatus(messageId: string, newStatus: StoredWhatsappMessage['status']) {
+  await requireAdministrator();
+  const path = `whatsapp_messages/${messageId}`;
+  try {
+    await updateDoc(doc(db, 'whatsapp_messages', messageId), {
+      status: newStatus,
+      updatedAt: serverTimestamp(),
+    });
   } catch (error) {
     handleFirestoreError(error, OperationType.UPDATE, path);
   }
