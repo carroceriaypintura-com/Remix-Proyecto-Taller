@@ -15,8 +15,25 @@
 // verificar firma para poder probarla con un POST de prueba).
 
 import crypto from 'node:crypto';
-import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
-import { db } from '../src/lib/firebase.js';
+import { initializeApp } from 'firebase/app';
+import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
+
+// La función es autocontenida a propósito: NO importa nada de src/.
+// (Importar src/lib/firebase.ts rompía el despliegue en Vercel: el
+// transpilado busca './adminPolicy' sin extensión y el módulo no existe
+// en la función.) La configuración de abajo es la configuración pública
+// web de Firebase, los mismos valores de firebase-applet-config.json que
+// ya lleva el sitio en el navegador de cada visitante.
+const firebaseConfig = {
+  apiKey: 'AIzaSyBP55pega3FDIoh3SXk2fVMX-cEQnwb72c',
+  authDomain: 'taller-de-carroceria-y-pintura.firebaseapp.com',
+  projectId: 'taller-de-carroceria-y-pintura',
+  storageBucket: 'taller-de-carroceria-y-pintura.firebasestorage.app',
+  messagingSenderId: '824347434506',
+  appId: '1:824347434506:web:af9a66e0e0f80d291989f3',
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app, 'ai-studio-remixremixremixp-2f705343-c737-41b5-bf0c-61e86a186964');
 
 export const config = { api: { bodyParser: false } };
 
