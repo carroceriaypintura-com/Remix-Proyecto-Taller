@@ -179,7 +179,7 @@ export default function SocialShowcase({ lang }: SocialShowcaseProps) {
       badge: 'Fotos Reales & Redes Sociales',
       title: 'Fotos Reales de Nuestro Taller',
       subtitle:
-        'Estas fotografías fueron compartidas directamente por el taller. También puedes visitar nuestros perfiles de Facebook e Instagram.',
+        'Estas fotografías fueron compartidas directamente por el taller. También puedes visitar nuestros perfiles de Facebook, Instagram, TikTok y Threads.',
       tabFeed: 'Fotos del Taller',
       tabReel: 'Video Reel de Facebook',
       tabPost: 'Publicación de Facebook',
@@ -193,7 +193,7 @@ export default function SocialShowcase({ lang }: SocialShowcaseProps) {
       badge: 'Real Photos & Social Media',
       title: 'Real Workshop Photos',
       subtitle:
-        'These original photographs were shared directly by the workshop. You can also visit our Facebook and Instagram profiles.',
+        'These original photographs were shared directly by the workshop. You can also visit our Facebook, Instagram, TikTok and Threads profiles.',
       tabFeed: 'Workshop Photos',
       tabReel: 'Facebook Video Reel',
       tabPost: 'Official Facebook Post',
@@ -483,6 +483,26 @@ export default function SocialShowcase({ lang }: SocialShowcaseProps) {
               >
                 <Instagram className="w-4 h-4" />
                 <span>Instagram: @carroceria_pintura_genesis</span>
+              </a>
+
+              <a
+                href={BUSINESS_INFO.social.tiktok}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-black hover:bg-neutral-900 text-white font-bold text-xs shadow-md transition-all hover:scale-105 border border-white/20"
+              >
+                <i className="fa-brands fa-tiktok text-sm" aria-hidden="true"></i>
+                <span>TikTok: @taller_decarroceria</span>
+              </a>
+
+              <a
+                href={BUSINESS_INFO.social.threads}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white hover:bg-neutral-200 text-black font-bold text-xs shadow-md transition-all hover:scale-105 border border-white/20"
+              >
+                <i className="fa-brands fa-threads text-sm" aria-hidden="true"></i>
+                <span>Threads: @carroceria_pintura_genesis</span>
               </a>
             </div>
           </div>

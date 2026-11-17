@@ -80,6 +80,30 @@ export default function Header() {
             <i className="fa-brands fa-x-twitter text-sm" aria-hidden="true"></i>
             <span className="sr-only">X</span>
           </a>
+
+          <a
+            href={BUSINESS_INFO.social.tiktok}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="TikTok Oficial"
+            title="TikTok Oficial"
+            className="inline-flex min-h-11 min-w-11 items-center justify-center gap-1 sm:gap-2 px-1.5 sm:px-3.5 py-2.5 rounded-full text-[10px] sm:text-sm font-semibold text-white bg-black hover:bg-neutral-900 border border-white/20 transition-all shadow-md hover:scale-105"
+          >
+            <i className="fa-brands fa-tiktok text-sm" aria-hidden="true"></i>
+            <span className="sr-only">TikTok</span>
+          </a>
+
+          <a
+            href={BUSINESS_INFO.social.threads}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Threads Oficial"
+            title="Threads Oficial"
+            className="inline-flex min-h-11 min-w-11 items-center justify-center gap-1 sm:gap-2 px-1.5 sm:px-3.5 py-2.5 rounded-full text-[10px] sm:text-sm font-semibold text-black bg-white hover:bg-neutral-200 border border-white/20 transition-all shadow-md hover:scale-105"
+          >
+            <i className="fa-brands fa-threads text-sm" aria-hidden="true"></i>
+            <span className="sr-only">Threads</span>
+          </a>
         </nav>
       </div>
     </header>

@@ -17,6 +17,8 @@ export const BUSINESS_INFO = {
   social: {
     facebook: 'https://www.facebook.com/AutoDetalladoGenesis',
     instagram: 'https://www.instagram.com/carroceria_pintura_genesis',
+    tiktok: 'https://www.tiktok.com/@taller_decarroceria',
+    threads: 'https://www.threads.com/@carroceria_pintura_genesis',
     twitter: 'https://x.com/Carroceria_Nog',
     whatsapp: 'https://wa.me/526311322616',
   },
