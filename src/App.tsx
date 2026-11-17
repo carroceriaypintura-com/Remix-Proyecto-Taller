@@ -30,7 +30,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#07090c] text-neutral-100 flex flex-col selection:bg-emerald-500 selection:text-neutral-950 scroll-smooth font-['Plus_Jakarta_Sans',sans-serif] relative">
+    <div className="min-h-screen text-neutral-100 flex flex-col selection:bg-emerald-500 selection:text-neutral-950 scroll-smooth font-['Plus_Jakarta_Sans',sans-serif] relative">
       {/* Video de fondo: carros del taller, en bucle y sin audio. */}
       <video
         ref={bgVideoRef}
