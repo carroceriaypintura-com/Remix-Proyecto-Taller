@@ -4,7 +4,7 @@ import { WORKSHOP_VIDEOS } from '../data/content';
 
 export default function WorkshopVideos({ lang }: { lang: Language }) {
   return (
-    <section id="videos" className="py-8 sm:py-12 border-b border-white/10 bg-[#10131c]">
+    <section id="videos" className="py-8 sm:py-12 border-b border-white/10 bg-[#10131c]/80 backdrop-blur-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
           <div>

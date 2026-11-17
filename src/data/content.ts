@@ -736,6 +736,9 @@ export const WORKSHOP_VIDEOS = [
   },
 ];
 
+export const BACKGROUND_VIDEO =
+  'https://pub-bea6ec2abbbd40e1a5b198e1169fe9bc.r2.dev/Video%20de%20fondo%20taller%2035s.mp4';
+
 export const SERVICES_LIST = [
   {
     number: '01',

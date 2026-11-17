@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { MessageCircle, ArrowUp, MapPin, Play } from 'lucide-react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 import { Analytics } from '@vercel/analytics/react';
@@ -13,17 +13,38 @@ import SocialShowcase from './components/SocialShowcase';
 import QuoteEstimator from './components/QuoteEstimator';
 import LocationContact from './components/LocationContact';
 import Footer from './components/Footer';
-import { BUSINESS_INFO } from './data/content';
+import { BACKGROUND_VIDEO, BUSINESS_INFO } from './data/content';
 
 export default function App() {
   const [lang, setLang] = useState<Language>('es');
+  const bgVideoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      bgVideoRef.current?.pause();
+    }
+  }, []);
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
     <div className="min-h-screen bg-[#07090c] text-neutral-100 flex flex-col selection:bg-emerald-500 selection:text-neutral-950 scroll-smooth font-['Plus_Jakarta_Sans',sans-serif] relative">
-      
+      {/* Video de fondo: carros del taller, en bucle y sin audio. */}
+      <video
+        ref={bgVideoRef}
+        className="fixed inset-0 -z-10 h-full w-full object-cover"
+        src={BACKGROUND_VIDEO}
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="auto"
+        aria-hidden="true"
+      />
+      <div aria-hidden="true" className="fixed inset-0 -z-10 bg-black/55" />
+
       {/* Header with brand identity and contact links. */}
       <Header />
 
@@ -36,14 +57,14 @@ export default function App() {
         <ServicesGrid lang={lang} />
         <ReviewsSection lang={lang} />
         <div className="max-w-7xl mx-auto px-4 py-4">
-          <details className="rounded-2xl border border-white/10 bg-[#10141d]">
+          <details className="rounded-2xl border border-white/10 bg-[#10141d]/80 backdrop-blur-sm">
             <summary className="action-pill action-purple m-3 cursor-pointer"><Play aria-hidden="true" />Videos y opciones de redes</summary>
             <SocialShowcase lang={lang} />
           </details>
         </div>
         <QuoteEstimator lang={lang} />
         <div className="max-w-7xl mx-auto px-4 pb-8">
-          <details className="rounded-2xl border border-white/10 bg-[#10141d]">
+          <details className="rounded-2xl border border-white/10 bg-[#10141d]/80 backdrop-blur-sm">
             <summary className="action-pill action-rose m-3 cursor-pointer"><MapPin aria-hidden="true" />Más opciones de ubicación y contacto</summary>
             <LocationContact lang={lang} />
           </details>
