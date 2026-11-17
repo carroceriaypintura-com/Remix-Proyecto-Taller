@@ -15,6 +15,7 @@
     "@google/genai": "^2.4.0",
     "@googlemaps/extended-component-library": "^0.7.0",
     "@tailwindcss/vite": "^4.3.3",
+    "@vercel/analytics": "^2.0.1",
     "@vercel/speed-insights": "^2.0.0",
     "@vis.gl/react-google-maps": "^1.10.1",
     "@vitejs/plugin-react": "^6.1.1",
