@@ -18,7 +18,7 @@ export default function FlagshipHomepage() {
         </figure>
       </section>
 
-      <section id="ubicacion" aria-labelledby="location-title" className="border-y border-white/10 bg-[#10141d]/80 backdrop-blur-sm">
+      <section id="ubicacion" aria-labelledby="location-title" className="border-y border-white/10 bg-[#10141d]/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 grid md:grid-cols-2 gap-5 items-center">
           <div className="space-y-3">
             <h2 id="location-title" className="text-xl sm:text-2xl font-bold flex items-center gap-2"><MapPin className="text-rose-400" aria-hidden="true" />Visítanos en Nogales</h2>

@@ -57,14 +57,14 @@ export default function App() {
         <ServicesGrid lang={lang} />
         <ReviewsSection lang={lang} />
         <div className="max-w-7xl mx-auto px-4 py-4">
-          <details className="rounded-2xl border border-white/10 bg-[#10141d]/80 backdrop-blur-sm">
+          <details className="rounded-2xl border border-white/10 bg-[#10141d]/80">
             <summary className="action-pill action-purple m-3 cursor-pointer"><Play aria-hidden="true" />Videos y opciones de redes</summary>
             <SocialShowcase lang={lang} />
           </details>
         </div>
         <QuoteEstimator lang={lang} />
         <div className="max-w-7xl mx-auto px-4 pb-8">
-          <details className="rounded-2xl border border-white/10 bg-[#10141d]/80 backdrop-blur-sm">
+          <details className="rounded-2xl border border-white/10 bg-[#10141d]/80">
             <summary className="action-pill action-rose m-3 cursor-pointer"><MapPin aria-hidden="true" />Más opciones de ubicación y contacto</summary>
             <LocationContact lang={lang} />
           </details>
