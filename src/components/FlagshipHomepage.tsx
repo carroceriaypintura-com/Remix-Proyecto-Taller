@@ -3,7 +3,7 @@ import { BUSINESS_INFO, FEATURED_WORK_PHOTO } from '../data/content';
 
 export default function FlagshipHomepage() {
   return (
-    <div className="bg-carbon-weave">
+    <div className="bg-carbon-weave-glass">
       <section aria-labelledby="home-title" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 grid lg:grid-cols-2 gap-6 items-center">
         <div className="space-y-4">
           <p className="text-xs font-semibold tracking-widest text-amber-300 uppercase">Carrocería · Pintura · Detallado</p>
@@ -18,7 +18,7 @@ export default function FlagshipHomepage() {
         </figure>
       </section>
 
-      <section id="ubicacion" aria-labelledby="location-title" className="border-y border-white/10 bg-[#10141d]">
+      <section id="ubicacion" aria-labelledby="location-title" className="border-y border-white/10 bg-[#10141d]/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 grid md:grid-cols-2 gap-5 items-center">
           <div className="space-y-3">
             <h2 id="location-title" className="text-xl sm:text-2xl font-bold flex items-center gap-2"><MapPin className="text-rose-400" aria-hidden="true" />Visítanos en Nogales</h2>

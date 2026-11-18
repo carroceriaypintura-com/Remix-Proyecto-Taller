@@ -19,7 +19,7 @@ export default function ServicesGrid({ lang }: ServicesGridProps) {
   };
 
   return (
-    <section id="servicios" className="py-8 sm:py-12 bg-[#12141c] border-b border-white/5 relative">
+    <section id="servicios" className="py-8 sm:py-12 bg-[#12141c]/80 border-b border-white/5 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header with Scroll Reveal */}

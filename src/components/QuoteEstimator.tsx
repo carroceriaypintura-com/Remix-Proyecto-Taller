@@ -63,7 +63,7 @@ _Hola, envío mis datos para una valoración personalizada de mi auto en José Z
   };
 
   return (
-    <section id="cotizador" className="py-8 sm:py-12 bg-[#12141c] border-b border-white/5 relative">
+    <section id="cotizador" className="py-8 sm:py-12 bg-[#12141c]/80 border-b border-white/5 relative">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
