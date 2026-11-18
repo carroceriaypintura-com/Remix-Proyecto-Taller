@@ -21,14 +21,9 @@
   background-position: 0 0, 5px 5px;
 }
 
-/* Misma textura de fibra de carbono, pero traslúcida para que se vea el video de fondo. */
+/* Capa oscura traslúcida y lisa (sin trama) para que el video de fondo se vea limpio. */
 .bg-carbon-weave-glass {
   background-color: rgba(8, 10, 14, 0.55);
-  background-image:
-    linear-gradient(45deg, rgba(16, 19, 25, 0.55) 25%, transparent 25%, transparent 75%, rgba(16, 19, 25, 0.55) 75%, rgba(16, 19, 25, 0.55)),
-    linear-gradient(45deg, rgba(16, 19, 25, 0.55) 25%, transparent 25%, transparent 75%, rgba(16, 19, 25, 0.55) 75%, rgba(16, 19, 25, 0.55));
-  background-size: 10px 10px;
-  background-position: 0 0, 5px 5px;
 }
 
 .bg-carbon-card {
