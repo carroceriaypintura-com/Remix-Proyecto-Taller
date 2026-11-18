@@ -43,7 +43,7 @@ export default function App() {
         preload="auto"
         aria-hidden="true"
       />
-      <div aria-hidden="true" className="fixed inset-0 -z-10 bg-black/55" />
+      <div aria-hidden="true" className="fixed inset-0 -z-10 bg-black/35" />
 
       {/* Header with brand identity and contact links. */}
       <Header />
