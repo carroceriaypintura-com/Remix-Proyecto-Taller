@@ -2,6 +2,7 @@ import { ArrowRight, MessageCircle, ChevronDown, Wrench, Flame, Sparkles, Shield
 import { Language } from '../types';
 import { SERVICES_LIST, BUSINESS_INFO } from '../data/content';
 import { useScrollReveal } from '../hooks/useScrollReveal';
+import { trackWhatsAppClick } from '../lib/analytics';
 
 interface ServicesGridProps {
   lang: Language;
@@ -103,6 +104,7 @@ export default function ServicesGrid({ lang }: ServicesGridProps) {
                     )}`}
                     target="_blank"
                     rel="noopener noreferrer"
+                    onClick={() => trackWhatsAppClick('servicio')}
                     className="action-pill action-green w-full"
                   >
                     <MessageCircle aria-hidden="true" /><span>{lang === 'es' ? 'Cotizar por WhatsApp' : 'Quote via WhatsApp'}</span>

@@ -13,6 +13,7 @@ import {
   doc,
   collection,
   setDoc,
+  deleteDoc,
   onSnapshot,
   query,
   orderBy,
@@ -106,6 +107,15 @@ export interface StoredQuote {
   status: 'recibida' | 'en_revision' | 'presupuestada' | 'en_taller' | 'entregada';
   userId: string;
   adminNotes?: string;
+  // Fotos adjuntas desde el cotizador web (hallazgos 2.1 y 2.2): se
+  // guardan junto con la cotización porque el proyecto no tiene
+  // Firebase Storage activado. `photoUrls` queda reservado para cuando
+  // las fotos vivan en un alojamiento con URL pública.
+  photoUrls?: string[];
+  photoData?: string[];
+  photoCount?: number;
+  photoStorage?: 'inline' | 'none';
+  source?: string;
   createdAt: any;
   updatedAt: any;
 }
@@ -221,6 +231,18 @@ export async function updateQuoteStatus(quoteId: string, newStatus: StoredQuote[
     await updateDoc(doc(db, 'quotes', quoteId), updatePayload);
   } catch (error) {
     handleFirestoreError(error, OperationType.UPDATE, path);
+  }
+}
+
+// Borrar una cotización (solo admin). Sirve para quitar solicitudes de
+// prueba o spam del panel.
+export async function deleteQuote(quoteId: string) {
+  await requireAdministrator();
+  const path = `quotes/${quoteId}`;
+  try {
+    await deleteDoc(doc(db, 'quotes', quoteId));
+  } catch (error) {
+    handleFirestoreError(error, OperationType.DELETE, path);
   }
 }
 
