@@ -17,6 +17,8 @@ export const BUSINESS_INFO = {
   social: {
     facebook: 'https://www.facebook.com/AutoDetalladoGenesis',
     instagram: 'https://www.instagram.com/carroceria_pintura_genesis',
+    tiktok: 'https://www.tiktok.com/@taller_decarroceria',
+    threads: 'https://www.threads.com/@carroceria_pintura_genesis',
     twitter: 'https://x.com/Carroceria_Nog',
     whatsapp: 'https://wa.me/526311322616',
   },
@@ -692,7 +694,50 @@ export const WORKSHOP_VIDEOS = [
     desc: 'Malibu negro de frente.',
     descEn: 'Black Malibu, front view.',
   },
+  {
+    id: 'video-yukon-denali-blanca-noche',
+    src: 'https://pub-bea6ec2abbbd40e1a5b198e1169fe9bc.r2.dev/Video%201%20Yukon%20Denali%20blanca%20de%20noche.mp4',
+    title: 'GMC Yukon Denali blanca, de noche',
+    titleEn: 'White GMC Yukon Denali, at night',
+    desc: 'GMC Yukon Denali blanca de noche, con las luces prendidas y la pintura brillosa.',
+    descEn: 'White GMC Yukon Denali at night, headlights on and paint shining.',
+  },
+  {
+    id: 'video-jeep-wrangler-azul',
+    src: 'https://pub-bea6ec2abbbd40e1a5b198e1169fe9bc.r2.dev/Video%202%20Jeep%20Wrangler%20azul.mp4',
+    title: 'Jeep Wrangler azul oscuro',
+    titleEn: 'Dark blue Jeep Wrangler',
+    desc: 'Jeep Wrangler azul oscuro, pintura con brillo espejo.',
+    descEn: 'Dark blue Jeep Wrangler, mirror-shine paint.',
+  },
+  {
+    id: 'video-acadia-plata',
+    src: 'https://pub-bea6ec2abbbd40e1a5b198e1169fe9bc.r2.dev/Video%203%20GMC%20Acadia%20plata.mp4',
+    title: 'GMC Acadia plata',
+    titleEn: 'Silver GMC Acadia',
+    desc: 'GMC Acadia plata, brillo de la pintura, parrilla y faros.',
+    descEn: 'Silver GMC Acadia, paint shine, grille and headlights.',
+  },
+  {
+    id: 'video-canyon-blanca',
+    src: 'https://pub-bea6ec2abbbd40e1a5b198e1169fe9bc.r2.dev/Video%204%20GMC%20Canyon%20blanca.mp4',
+    title: 'GMC Canyon blanca',
+    titleEn: 'White GMC Canyon',
+    desc: 'GMC Canyon blanca, trabajo recién hecho.',
+    descEn: 'White GMC Canyon, freshly finished work.',
+  },
+  {
+    id: 'video-silverado-negra-detallado',
+    src: 'https://pub-bea6ec2abbbd40e1a5b198e1169fe9bc.r2.dev/Video%205%20Chevrolet%20Silverado%20negra.mp4',
+    title: 'Chevrolet Silverado negra, detallado',
+    titleEn: 'Black Chevrolet Silverado, detailing',
+    desc: 'Chevrolet Silverado negra Z71 en detallado.',
+    descEn: 'Black Chevrolet Silverado Z71 being detailed.',
+  },
 ];
+
+export const BACKGROUND_VIDEO =
+  'https://pub-bea6ec2abbbd40e1a5b198e1169fe9bc.r2.dev/Video%20de%20fondo%20taller%2035s.mp4';
 
 export const SERVICES_LIST = [
   {

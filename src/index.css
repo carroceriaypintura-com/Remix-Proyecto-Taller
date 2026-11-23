@@ -3,6 +3,7 @@
 @layer base {
   body {
     font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: #07090c;
   }
 }
 
@@ -18,6 +19,11 @@
     linear-gradient(45deg, #101319 25%, transparent 25%, transparent 75%, #101319 75%, #101319);
   background-size: 10px 10px;
   background-position: 0 0, 5px 5px;
+}
+
+/* Capa oscura traslúcida y lisa (sin trama) para que el video de fondo se vea limpio. */
+.bg-carbon-weave-glass {
+  background-color: rgba(8, 10, 14, 0.55);
 }
 
 .bg-carbon-card {

@@ -36,6 +36,19 @@ service cloud.firestore {
              data.rating is number && data.rating >= 1 && data.rating <= 5;
     }
 
+    function isValidWhatsappMessageId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_.-]+$');
+    }
+
+    function isValidWhatsappMessage(data) {
+      return data.wamid is string && data.wamid.size() > 0 && data.wamid.size() <= 128 &&
+             data.from is string && data.from.size() > 0 && data.from.size() <= 30 &&
+             data.type is string && data.type.size() > 0 && data.type.size() <= 30 &&
+             data.text is string && data.text.size() <= 2000 &&
+             data.timestamp is number &&
+             data.status in ['nuevo', 'leido', 'contestado'];
+    }
+
     // Admins collection
     match /admins/{adminId} {
       allow get: if isSignedIn() && (request.auth.uid == adminId || isAdmin());
@@ -63,6 +76,21 @@ service cloud.firestore {
                       request.resource.data.userId == request.auth.uid &&
                       isValidReview(request.resource.data);
       allow update, delete: if isValidId(reviewId) && (isAdmin() || (isSignedIn() && resource.data.userId == request.auth.uid));
+    }
+
+    // WhatsApp messages collection (incoming messages saved by the Meta webhook)
+    // Create is open because the webhook writes without a signed-in user; the
+    // function only accepts events signed by Meta (X-Hub-Signature-256 with
+    // the app secret) and the data shape is validated here (wamid must match
+    // the document id). Only the admin can read, update or delete.
+    match /whatsapp_messages/{messageId} {
+      allow get, list: if isAdmin();
+      allow create: if isValidWhatsappMessageId(messageId) &&
+                      isValidWhatsappMessage(request.resource.data) &&
+                      request.resource.data.wamid == messageId;
+      allow update: if isValidWhatsappMessageId(messageId) && isAdmin() &&
+                      isValidWhatsappMessage(request.resource.data);
+      allow delete: if isAdmin();
     }
   }
 }
