@@ -283,7 +283,7 @@ export default function MainPortalHero({ lang, onToggleLang }: MainPortalHeroPro
                     Facebook Oficial
                   </div>
                   <div className="text-[11px] text-neutral-400">
-                    Auto Detallado Genesis
+                    @carroceriaypintura.g
                   </div>
                 </div>
               </div>
@@ -308,7 +308,7 @@ export default function MainPortalHero({ lang, onToggleLang }: MainPortalHeroPro
                     Instagram Oficial
                   </div>
                   <div className="text-[11px] text-neutral-400">
-                    @carroceria_pintura_genesis
+                    @carroceriaypintura_
                   </div>
                 </div>
               </div>

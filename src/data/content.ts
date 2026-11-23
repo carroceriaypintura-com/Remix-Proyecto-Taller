@@ -15,8 +15,8 @@ export const BUSINESS_INFO = {
   googleMapsCoordinatesUrl: 'https://www.google.com/maps/place/Taller+de+Carrocer%C3%ADa+y+Pintura/@31.2988874,-110.9549794,19z/data=!3m1!4b1!4m6!3m5!1s0x86d153005b10bfed:0x3f274fab2f53c6a5!8m2!3d31.2988874!4d-110.9549794!16s%2Fg%2F11zf0m97xm',
   googleMapsEmbed: '/locator.html',
   social: {
-    facebook: 'https://www.facebook.com/AutoDetalladoGenesis',
-    instagram: 'https://www.instagram.com/carroceria_pintura_genesis',
+    facebook: 'https://www.facebook.com/carroceriaypintura.g',
+    instagram: 'https://www.instagram.com/carroceriaypintura_',
     tiktok: 'https://www.tiktok.com/@taller_decarroceria',
     threads: 'https://www.threads.com/@carroceria_pintura_genesis',
     twitter: 'https://x.com/Carroceria_Nog',
