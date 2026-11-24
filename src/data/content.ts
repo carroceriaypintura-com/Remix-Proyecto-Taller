@@ -739,6 +739,12 @@ export const WORKSHOP_VIDEOS = [
 export const BACKGROUND_VIDEO =
   'https://pub-bea6ec2abbbd40e1a5b198e1169fe9bc.r2.dev/Video%20de%20fondo%20taller%2035s.mp4';
 
+// Foto fija que se muestra en lugar del video de fondo en el celular,
+// para no descargar 15 MB con datos móviles. Es la fachada del taller,
+// ya alojada en R2 junto con el resto de las fotos.
+export const BACKGROUND_POSTER =
+  'https://pub-bea6ec2abbbd40e1a5b198e1169fe9bc.r2.dev/13_taller_fachada_genesis.jpg';
+
 export const SERVICES_LIST = [
   {
     number: '01',

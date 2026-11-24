@@ -49,6 +49,7 @@ import {
   requireAdministrator,
   subscribeToQuotes,
   updateQuoteStatus,
+  deleteQuote,
   StoredQuote,
   subscribeToWhatsappMessages,
   updateWhatsappMessageStatus,
@@ -1068,6 +1069,17 @@ export default function GoogleWorkspaceHub({ isOpen, onClose }: GoogleWorkspaceH
                         </div>
                       )}
 
+                      {/* Fotos adjuntas desde el cotizador web */}
+                      {((q.photoUrls && q.photoUrls.length > 0) || (q.photoData && q.photoData.length > 0)) && (
+                        <div className="flex gap-2 overflow-x-auto py-1">
+                          {[...(q.photoUrls || []), ...(q.photoData || [])].map((src, i) => (
+                            <a key={i} href={src} target="_blank" rel="noopener noreferrer" title="Abrir foto en grande">
+                              <img src={src} alt={`Foto del daño ${i + 1}`} className="w-16 h-16 rounded-lg object-cover border border-white/10 shrink-0" />
+                            </a>
+                          ))}
+                        </div>
+                      )}
+
                       {/* Status changer buttons */}
                       <div className="flex items-center gap-1.5 pt-1">
                         <span className="text-[10px] text-neutral-400">Cambiar estado:</span>
@@ -1084,6 +1096,16 @@ export default function GoogleWorkspaceHub({ isOpen, onClose }: GoogleWorkspaceH
                             {st}
                           </button>
                         ))}
+                        <button
+                          onClick={() => {
+                            if (window.confirm(`¿Eliminar la cotización de ${q.clientName} (${q.id})? Esta acción no se puede deshacer.`)) {
+                              deleteQuote(q.id);
+                            }
+                          }}
+                          className="ml-auto px-2 py-0.5 rounded text-[10px] font-semibold bg-white/5 text-rose-400 hover:bg-rose-500/20 transition-colors"
+                        >
+                          Eliminar
+                        </button>
                       </div>
                     </div>
                   ))}

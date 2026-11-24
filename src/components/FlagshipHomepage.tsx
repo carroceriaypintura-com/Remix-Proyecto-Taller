@@ -1,5 +1,6 @@
 import { Wrench, Images, MapPin, Calculator, Navigation, Phone, MessageCircle, Clock } from 'lucide-react';
 import { BUSINESS_INFO, FEATURED_WORK_PHOTO } from '../data/content';
+import { trackWhatsAppClick } from '../lib/analytics';
 
 export default function FlagshipHomepage() {
   return (
@@ -9,7 +10,7 @@ export default function FlagshipHomepage() {
           <p className="text-xs font-semibold tracking-widest text-amber-300 uppercase">Carrocería · Pintura · Detallado</p>
           <h1 id="home-title" className="font-serif-luxury text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight">Brillo que se nota.<br />Trabajo que responde.</h1>
           <p className="text-sm text-neutral-300">Tu taller en Los Encinos, Nogales.</p>
-          <a href={`${BUSINESS_INFO.social.whatsapp}?text=${encodeURIComponent('Hola, me gustaría cotizar una reparación para mi auto.')}`} target="_blank" rel="noopener noreferrer" className="action-pill action-green">
+          <a href={`${BUSINESS_INFO.social.whatsapp}?text=${encodeURIComponent('Hola, me gustaría cotizar una reparación para mi auto.')}`} target="_blank" rel="noopener noreferrer" onClick={() => trackWhatsAppClick('heroe')} className="action-pill action-green">
             <MessageCircle aria-hidden="true" />Cotiza por WhatsApp
           </a>
         </div>
