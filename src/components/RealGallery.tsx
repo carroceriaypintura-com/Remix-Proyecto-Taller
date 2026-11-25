@@ -54,11 +54,11 @@ export default function RealGallery({ lang }: { lang: Language }) {
             <Images aria-hidden="true" />{lang === 'es' ? `Abrir biblioteca (${REAL_WORK_PHOTOS.length} fotos)` : `Open library (${REAL_WORK_PHOTOS.length} photos)`}
           </button>
         </div>
-        <div className="grid grid-cols-3 gap-2 sm:gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
           {photos.map((item) => (
             <button type="button" key={item.id} aria-label={`${lang === 'es' ? 'Ampliar' : 'Enlarge'}: ${item.title}`} onClick={() => { setActive(REAL_WORK_PHOTOS.indexOf(item)); setOpen(true); }} className="group overflow-hidden rounded-xl border border-white/15 bg-black text-left focus-visible:outline-2 focus-visible:outline-purple-400">
               <img src={item.src} alt={item.title} loading="lazy" className="aspect-square sm:aspect-[4/3] w-full object-cover group-hover:scale-105 transition-transform" />
-              <span className="flex items-center justify-between gap-1 text-[10px] sm:text-sm px-2 sm:px-3 py-2 text-neutral-200"><span className="truncate">{lang === 'es' ? item.title : item.titleEn}</span><ZoomIn aria-hidden="true" className="w-4 h-4 shrink-0 text-purple-300" /></span>
+              <span className="flex items-center justify-between gap-1 text-xs sm:text-sm px-2 sm:px-3 py-2 text-neutral-200"><span className="truncate">{lang === 'es' ? item.title : item.titleEn}</span><ZoomIn aria-hidden="true" className="w-4 h-4 shrink-0 text-purple-300" /></span>
             </button>
           ))}
         </div>

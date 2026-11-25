@@ -20,7 +20,7 @@ export default function ServicesGrid({ lang }: ServicesGridProps) {
   };
 
   return (
-    <section id="servicios" className="py-8 sm:py-12 bg-[#12141c]/80 border-b border-white/5 relative">
+    <section id="servicios" className="py-10 sm:py-12 bg-[#12141c]/80 border-b border-white/5 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header with Scroll Reveal */}
@@ -47,7 +47,7 @@ export default function ServicesGrid({ lang }: ServicesGridProps) {
         {/* 3-Column Services Grid with Staggered Scroll Reveal */}
         <div
           ref={gridRef}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-3"
         >
           {SERVICES_LIST.map((srv, idx) => {
             const IconComponent = icons[idx % icons.length];
@@ -57,13 +57,13 @@ export default function ServicesGrid({ lang }: ServicesGridProps) {
             return (
               <div
                 key={srv.number}
-                className={`group relative bg-[#1a1d26] hover:bg-[#202430] border border-white/5 hover:border-amber-500/30 rounded-2xl p-4 sm:p-5 flex flex-col justify-between shadow-sm hover:shadow-md transition-all duration-700 ease-out ${delayClass} ${
+                className={`group relative bg-[#1a1d26] hover:bg-[#202430] border border-white/5 hover:border-amber-500/30 rounded-2xl p-5 flex flex-col justify-between shadow-sm hover:shadow-md transition-all duration-700 ease-out ${delayClass} ${
                   gridVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-12 scale-[0.97]'
                 }`}
               >
                 <div>
                   {/* Top Badges (No monospace code look) */}
-                  <div className="flex items-center justify-between text-xs mb-5">
+                  <div className="flex items-center justify-between text-xs mb-4 sm:mb-5">
                     <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400">
                       Servicio {cleanNumber}
                     </span>
