@@ -116,7 +116,7 @@ export default function SocialShowcase({ lang }: SocialShowcaseProps) {
     if (!newImageUrl.trim()) return;
 
     const channelName =
-      newPlatform === 'facebook' ? '@carroceriaypintura.g' : '@carroceriaypintura_';
+      newPlatform === 'facebook' ? 'Taller de Carrocería y Pintura' : '@carroceriaypintura_';
     const channelUrl =
       newPostUrl.trim() ||
       (newPlatform === 'facebook'
@@ -472,7 +472,7 @@ export default function SocialShowcase({ lang }: SocialShowcaseProps) {
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs shadow-md transition-all hover:scale-105"
               >
                 <Facebook className="w-4 h-4 fill-white" />
-                <span>Facebook: @carroceriaypintura.g</span>
+                <span>Facebook: Taller de Carrocería y Pintura</span>
               </a>
 
               <a
@@ -548,7 +548,7 @@ export default function SocialShowcase({ lang }: SocialShowcaseProps) {
 
                 {/* Direct Link Footnote */}
                 <div className="w-full pt-3 px-1 flex items-center justify-between text-[11px] text-neutral-400">
-                  <span className="truncate pr-2">@carroceriaypintura.g</span>
+                  <span className="truncate pr-2">Taller de Carrocería y Pintura</span>
                   <a
                     href={activeMedia === 'reel' ? FB_REEL_URL : FB_POST_URL}
                     target="_blank"
@@ -568,7 +568,7 @@ export default function SocialShowcase({ lang }: SocialShowcaseProps) {
                 <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-lg bg-amber-500/10 text-amber-400 text-xs font-semibold">
                   <Sparkles className="w-3.5 h-3.5 text-amber-500" />
                   <span>
-                    {activeMedia === 'reel' ? 'Video en Vivo' : 'Publicación Oficial'} • @carroceriaypintura.g
+                    {activeMedia === 'reel' ? 'Video en Vivo' : 'Publicación Oficial'} • Taller de Carrocería y Pintura
                   </span>
                 </div>
 
