@@ -1,13 +1,15 @@
-import { useState, useId } from 'react';
-import { Wrench, Upload, Trash2, MessageCircle, Sparkles, Check } from 'lucide-react';
+import { useState, useId, useEffect } from 'react';
+import { Wrench, Upload, Trash2, MessageCircle, Sparkles, Check, AlertTriangle, RotateCcw } from 'lucide-react';
 import { Language } from '../types';
 import { BUSINESS_INFO } from '../data/content';
+import { trackLead } from '../lib/analytics';
+import { subscribeToSiteContent, findServiceOverride, SiteContentOverride } from '../lib/siteContent';
 
 interface QuoteEstimatorProps {
   lang: Language;
 }
 
-const COMMON_SERVICES = [
+export const COMMON_SERVICES = [
   { id: 'facia', nameEs: 'Fascia / Defensa', nameEn: 'Bumper Repair & Paint', minMxn: 1800, maxMxn: 2600, badge: 'Popular' },
   { id: 'salpicadera', nameEs: 'Salpicadera / Puerta', nameEn: 'Fender / Door Repair', minMxn: 1700, maxMxn: 2400 },
   { id: 'cofre', nameEs: 'Cofre / Cajuela', nameEn: 'Hood / Trunk Panel', minMxn: 2200, maxMxn: 3200 },
@@ -18,6 +20,56 @@ const COMMON_SERVICES = [
   { id: 'chasis', nameEs: 'Hojalatería de Colisión', nameEn: 'Collision Bodywork', minMxn: 3000, maxMxn: 6500 },
 ];
 
+const MAX_PHOTOS = 3;
+const MAX_PHOTO_BYTES = 250 * 1024;
+
+interface AttachedPhoto {
+  file: File;
+  preview: string;
+}
+
+interface SentQuote {
+  quoteId: string | null;
+  whatsappUrl: string;
+}
+
+function fileToDataUrl(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result));
+    reader.onerror = () => reject(new Error('No se pudo leer la foto.'));
+    reader.readAsDataURL(file);
+  });
+}
+
+function loadImage(src: string): Promise<HTMLImageElement> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = () => reject(new Error('No se pudo cargar la foto.'));
+    img.src = src;
+  });
+}
+
+// Reduce la foto a un tamaño apto para guardarla junto con la cotización
+// (máx. 1000 px por el lado mayor, JPEG). Una foto de celular de 12 MP
+// queda normalmente entre 80 y 180 KB después de este paso.
+async function downscalePhoto(file: File): Promise<string> {
+  const src = await fileToDataUrl(file);
+  const img = await loadImage(src);
+  const maxDim = 1000;
+  const scale = Math.min(1, maxDim / Math.max(img.width, img.height));
+  const width = Math.max(1, Math.round(img.width * scale));
+  const height = Math.max(1, Math.round(img.height * scale));
+  const canvas = document.createElement('canvas');
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) throw new Error('No se pudo procesar la foto.');
+  ctx.drawImage(img, 0, 0, width, height);
+  return canvas.toDataURL('image/jpeg', 0.75);
+}
+
 export default function QuoteEstimator({ lang }: QuoteEstimatorProps) {
   const photoInputId = useId();
   const [selectedService, setSelectedService] = useState<string>('facia');
@@ -25,42 +77,180 @@ export default function QuoteEstimator({ lang }: QuoteEstimatorProps) {
   const [clientName, setClientName] = useState('');
   const [clientPhone, setClientPhone] = useState('');
   const [damageNotes, setDamageNotes] = useState('');
-  const [uploadedPhotos, setUploadedPhotos] = useState<string[]>([]);
-  const activeService = COMMON_SERVICES.find((s) => s.id === selectedService) || COMMON_SERVICES[0];
+  const [attachedPhotos, setAttachedPhotos] = useState<AttachedPhoto[]>([]);
+  const [errors, setErrors] = useState<{ vehicle?: string; phone?: string; photos?: string }>({});
+  const [sending, setSending] = useState(false);
+  const [saveWarning, setSaveWarning] = useState<string | null>(null);
+  const [popupBlocked, setPopupBlocked] = useState(false);
+  const [sent, setSent] = useState<SentQuote | null>(null);
+  // Precios editados desde el panel de administración (site_content/general).
+  // Si no hay nada guardado o la lectura falla, se usan los precios fijos.
+  const [contentOverride, setContentOverride] = useState<SiteContentOverride | null>(null);
+  useEffect(() => subscribeToSiteContent(setContentOverride), []);
+  const services = COMMON_SERVICES.map((s) => {
+    const o = findServiceOverride(contentOverride?.services, s.id);
+    if (!o) return s;
+    return {
+      ...s,
+      nameEs: o.title ?? s.nameEs,
+      minMxn: o.minMxn ?? s.minMxn,
+      maxMxn: o.maxMxn ?? s.maxMxn,
+    };
+  });
+  const activeService = services.find((s) => s.id === selectedService) || services[0];
   const usdMin = Math.round(activeService.minMxn / 18.5);
   const usdMax = Math.round(activeService.maxMxn / 18.5);
 
   const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files) return;
-    const newPhotos: string[] = [];
-    Array.from(files).forEach((file) => {
-      newPhotos.push(URL.createObjectURL(file));
-    });
-    setUploadedPhotos((prev) => [...prev, ...newPhotos]);
+    const room = MAX_PHOTOS - attachedPhotos.length;
+    if (room <= 0) {
+      setErrors((prev) => ({ ...prev, photos: lang === 'es' ? `Máximo ${MAX_PHOTOS} fotos por cotización.` : `Maximum ${MAX_PHOTOS} photos per quote.` }));
+      e.target.value = '';
+      return;
+    }
+    const picked = Array.from(files).slice(0, room);
+    if (files.length > room) {
+      setErrors((prev) => ({ ...prev, photos: lang === 'es' ? `Solo se tomaron las primeras ${MAX_PHOTOS} fotos.` : `Only the first ${MAX_PHOTOS} photos were kept.` }));
+    } else {
+      setErrors((prev) => ({ ...prev, photos: undefined }));
+    }
+    const added: AttachedPhoto[] = picked.map((file) => ({ file, preview: URL.createObjectURL(file) }));
+    setAttachedPhotos((prev) => [...prev, ...added]);
+    e.target.value = '';
   };
 
   const removePhoto = (idx: number) => {
-    setUploadedPhotos((prev) => prev.filter((_, i) => i !== idx));
+    setAttachedPhotos((prev) => {
+      const removed = prev[idx];
+      if (removed) URL.revokeObjectURL(removed.preview);
+      return prev.filter((_, i) => i !== idx);
+    });
   };
 
-  const handleSendWhatsApp = () => {
-    const text = 
+  const handleSendWhatsApp = async () => {
+    if (sending || sent) return;
+    setSaveWarning(null);
+    setPopupBlocked(false);
+
+    const nextErrors: { vehicle?: string; phone?: string } = {};
+    const vehicle = vehicleModel.trim();
+    if (!vehicle) {
+      nextErrors.vehicle = lang === 'es' ? 'Escribe tu vehículo (marca, modelo y año).' : 'Enter your vehicle (make, model and year).';
+    } else if (vehicle.length > 50) {
+      nextErrors.vehicle = lang === 'es' ? 'El vehículo debe tener 50 caracteres o menos.' : 'Vehicle must be 50 characters or fewer.';
+    }
+    const phoneDigits = clientPhone.replace(/\D/g, '');
+    if (phoneDigits.length < 10) {
+      nextErrors.phone = lang === 'es' ? 'Escribe un teléfono válido de al menos 10 dígitos.' : 'Enter a valid phone number with at least 10 digits.';
+    }
+    setErrors((prev) => ({ ...prev, ...nextErrors }));
+    if (nextErrors.vehicle || nextErrors.phone) return;
+
+    setSending(true);
+    let quoteId: string | null = null;
+    let photoCount = 0;
+    try {
+      // Reducir las fotos antes de enviarlas para que quepan en la solicitud.
+      const photoData: string[] = [];
+      let skippedPhotos = 0;
+      for (const photo of attachedPhotos) {
+        try {
+          const dataUrl = await downscalePhoto(photo.file);
+          const approxBytes = Math.round((dataUrl.length * 3) / 4);
+          if (approxBytes > MAX_PHOTO_BYTES) {
+            skippedPhotos += 1;
+            continue;
+          }
+          photoData.push(dataUrl);
+        } catch {
+          skippedPhotos += 1;
+        }
+      }
+      if (skippedPhotos > 0) {
+        setErrors((prev) => ({
+          ...prev,
+          photos: lang === 'es'
+            ? `${skippedPhotos} foto(s) no se pudieron adjuntar por su tamaño.`
+            : `${skippedPhotos} photo(s) could not be attached because of their size.`,
+        }));
+      }
+      photoCount = photoData.length;
+
+      // Guardar la cotización en el sistema ANTES de abrir WhatsApp.
+      // Si el guardado falla, no se bloquea el envío: se avisa y se
+      // sigue a WhatsApp con los datos.
+      const response = await fetch('/api/quote', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          clientName: clientName.trim(),
+          clientPhone: clientPhone.trim(),
+          vehicle,
+          serviceId: activeService.id,
+          estimatedRange: `$${activeService.minMxn.toLocaleString()} - $${activeService.maxMxn.toLocaleString()} MXN`,
+          description: damageNotes.trim(),
+          photos: photoData.map((data, i) => ({ name: attachedPhotos[i]?.file.name || `foto-${i + 1}.jpg`, data })),
+        }),
+      });
+      const result = await response.json().catch(() => null);
+      if (response.ok && result?.ok) {
+        quoteId = result.quoteId as string;
+      } else {
+        setSaveWarning(
+          lang === 'es'
+            ? 'No se pudo guardar tu solicitud en el sistema, pero puedes enviarla por WhatsApp con el botón de abajo.'
+            : 'Your request could not be saved in our system, but you can still send it via WhatsApp with the button below.'
+        );
+      }
+    } catch {
+      setSaveWarning(
+        lang === 'es'
+          ? 'No se pudo guardar tu solicitud en el sistema, pero puedes enviarla por WhatsApp con el botón de abajo.'
+          : 'Your request could not be saved in our system, but you can still send it via WhatsApp with the button below.'
+      );
+    }
+
+    const photoLine =
+      photoCount > 0
+        ? `\n*Fotos:* ${photoCount} foto(s) adjunta(s) en la solicitud web, visibles en el panel del taller.`
+        : '';
+    const text =
 `*SOLICITUD DE VALORACIÓN - CARROCERÍA Y PINTURA NOGALES*
----------------------------------------
-*Cliente:* ${clientName || 'Cliente web'}
-*Teléfono:* ${clientPhone || 'No especificado'}
+---------------------------------------${quoteId ? `\n*Folio web:* ${quoteId}` : ''}
+*Cliente:* ${clientName.trim() || 'Cliente web'}
+*Teléfono:* ${clientPhone.trim()}
 *Servicio solicitado:* ${activeService.nameEs}
-*Vehículo:* ${vehicleModel || 'No especificado'}
+*Vehículo:* ${vehicle}
 *Estimado orientativo:* $${activeService.minMxn.toLocaleString()} - $${activeService.maxMxn.toLocaleString()} MXN (Aprox. $${usdMin} - $${usdMax} USD)
-*Detalles:* ${damageNotes || 'Sin notas'}
-*Fotos preparadas:* ${uploadedPhotos.length} foto(s)
+Precio final sujeto a revisión física del vehículo.
+*Detalles:* ${damageNotes.trim() || 'Sin notas'}${photoLine}
 ---------------------------------------
 _Hola, envío mis datos para una valoración personalizada de mi auto en José Zazueta #16, Los Encinos._`;
 
     const url = `https://wa.me/${BUSINESS_INFO.whatsappNumber}?text=${encodeURIComponent(text)}`;
-    window.open(url, '_blank');
+    const opened = window.open(url, '_blank');
+    if (!opened) setPopupBlocked(true);
+    trackLead(activeService.id, activeService.minMxn);
+    setSent({ quoteId, whatsappUrl: url });
+    setSending(false);
   };
+
+  const resetForm = () => {
+    attachedPhotos.forEach((p) => URL.revokeObjectURL(p.preview));
+    setAttachedPhotos([]);
+    setVehicleModel('');
+    setClientName('');
+    setClientPhone('');
+    setDamageNotes('');
+    setErrors({});
+    setSaveWarning(null);
+    setPopupBlocked(false);
+    setSent(null);
+  };
+
+  const inputErrorClass = 'border-rose-500/70';
 
   return (
     <section id="cotizador" className="py-8 sm:py-12 bg-[#12141c]/80 border-b border-white/5 relative">
@@ -85,6 +275,57 @@ _Hola, envío mis datos para una valoración personalizada de mi auto en José Z
         {/* Solid Slate Card #1a1d26 (No glassmorphism, rounded-2xl, soft shadow) */}
         <div className="relative rounded-2xl bg-[#1a1d26] border border-white/5 p-4 sm:p-7 space-y-7 shadow-md">
           
+          {/* Confirmation after sending */}
+          {sent && (
+            <div className="rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-4 sm:p-5 space-y-3" role="status">
+              <div className="flex items-start gap-3">
+                <span className="shrink-0 w-9 h-9 rounded-full bg-emerald-500 text-black flex items-center justify-center">
+                  <Check className="w-5 h-5" />
+                </span>
+                <div>
+                  <div className="text-sm sm:text-base font-bold text-white">
+                    {lang === 'es' ? '¡Solicitud enviada!' : 'Request sent!'}
+                  </div>
+                  <p className="text-xs sm:text-sm text-neutral-300 mt-1 leading-relaxed">
+                    {lang === 'es'
+                      ? 'Tu solicitud quedó registrada y se abrió WhatsApp con tus datos. Te contestamos por WhatsApp.'
+                      : 'Your request was registered and WhatsApp opened with your details. We will reply on WhatsApp.'}
+                  </p>
+                  {sent.quoteId && (
+                    <p className="text-xs text-emerald-300 font-semibold mt-1">
+                      {lang === 'es' ? 'Folio web:' : 'Web reference:'} {sent.quoteId}
+                    </p>
+                  )}
+                </div>
+              </div>
+              {saveWarning && (
+                <div className="flex items-start gap-2 rounded-xl border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-xs text-amber-200">
+                  <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
+                  <span>{saveWarning}</span>
+                </div>
+              )}
+              {popupBlocked && (
+                <a
+                  href={sent.whatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="action-pill action-green w-full"
+                >
+                  <MessageCircle className="w-4 h-4 fill-neutral-950" />
+                  <span>{lang === 'es' ? 'Abrir WhatsApp con mis datos' : 'Open WhatsApp with my details'}</span>
+                </a>
+              )}
+              <button
+                type="button"
+                onClick={resetForm}
+                className="inline-flex items-center gap-2 text-xs font-semibold text-neutral-300 hover:text-white underline underline-offset-4 cursor-pointer"
+              >
+                <RotateCcw className="w-3.5 h-3.5" />
+                {lang === 'es' ? 'Hacer otra cotización' : 'Start another quote'}
+              </button>
+            </div>
+          )}
+
           {/* Step 1: Select Service */}
           <div>
             <div className="flex items-center justify-between mb-3">
@@ -97,7 +338,7 @@ _Hola, envío mis datos para una valoración personalizada de mi auto en José Z
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-              {COMMON_SERVICES.map((s) => {
+              {services.map((s) => {
                 const isSelected = selectedService === s.id;
                 return (
                   <button
@@ -135,10 +376,12 @@ _Hola, envío mis datos para una valoración personalizada de mi auto en José Z
               <input
                 type="text"
                 value={vehicleModel}
-                onChange={(e) => setVehicleModel(e.target.value)}
+                onChange={(e) => { setVehicleModel(e.target.value); setErrors((prev) => ({ ...prev, vehicle: undefined })); }}
                 placeholder={lang === 'es' ? 'Ej: Silverado 2021, Civic 2020...' : 'e.g. Ford F150 2021, Civic...'}
-                className="w-full px-4 py-3 bg-[#12141c] border border-white/10 rounded-2xl text-xs sm:text-sm text-white placeholder-neutral-500 focus:outline-none focus:border-amber-500/50 transition-colors shadow-inner"
+                aria-invalid={Boolean(errors.vehicle)}
+                className={`w-full px-4 py-3 bg-[#12141c] border rounded-2xl text-xs sm:text-sm text-white placeholder-neutral-500 focus:outline-none focus:border-amber-500/50 transition-colors shadow-inner ${errors.vehicle ? inputErrorClass : 'border-white/10'}`}
               />
+              {errors.vehicle && <p className="text-[11px] text-rose-400 mt-1.5">{errors.vehicle}</p>}
             </div>
 
             <div>
@@ -161,12 +404,13 @@ _Hola, envío mis datos para una valoración personalizada de mi auto en José Z
                   onChange={handlePhotoUpload}
                   className="hidden"
                 />
-                {uploadedPhotos.length > 0 && (
+                {attachedPhotos.length > 0 && (
                   <span className="text-xs text-amber-400 font-bold px-2.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/20">
-                    {uploadedPhotos.length} {lang === 'es' ? 'foto(s)' : 'photo(s)'}
+                    {attachedPhotos.length} {lang === 'es' ? 'foto(s)' : 'photo(s)'}
                   </span>
                 )}
               </div>
+              {errors.photos && <p className="text-[11px] text-amber-400 mt-1.5">{errors.photos}</p>}
             </div>
           </div>
 
@@ -192,22 +436,25 @@ _Hola, envío mis datos para una valoración personalizada de mi auto en José Z
               <input
                 type="tel"
                 value={clientPhone}
-                onChange={(e) => setClientPhone(e.target.value)}
+                onChange={(e) => { setClientPhone(e.target.value); setErrors((prev) => ({ ...prev, phone: undefined })); }}
                 placeholder="Ej: (631) 123-4567"
-                className="w-full px-4 py-2.5 bg-[#12141c] border border-white/10 rounded-xl text-xs sm:text-sm text-white placeholder-neutral-500 focus:outline-none focus:border-amber-500/50 transition-colors"
+                aria-invalid={Boolean(errors.phone)}
+                className={`w-full px-4 py-2.5 bg-[#12141c] border rounded-xl text-xs sm:text-sm text-white placeholder-neutral-500 focus:outline-none focus:border-amber-500/50 transition-colors ${errors.phone ? inputErrorClass : 'border-white/10'}`}
               />
+              {errors.phone && <p className="text-[11px] text-rose-400 mt-1.5">{errors.phone}</p>}
             </div>
           </div>
 
           {/* Photo previews */}
-          {uploadedPhotos.length > 0 && (
+          {attachedPhotos.length > 0 && (
             <div className="flex gap-2.5 overflow-x-auto py-1">
-              {uploadedPhotos.map((url, i) => (
+              {attachedPhotos.map((photo, i) => (
                 <div key={i} className="relative w-16 h-16 rounded-xl overflow-hidden border border-white/10 shrink-0 shadow-md">
-                  <img src={url} alt={`Foto ${i + 1}`} className="w-full h-full object-cover" />
+                  <img src={photo.preview} alt={`Foto ${i + 1}`} className="w-full h-full object-cover" />
                   <button
                     type="button"
                     onClick={() => removePhoto(i)}
+                    aria-label={lang === 'es' ? `Quitar foto ${i + 1}` : `Remove photo ${i + 1}`}
                     className="absolute top-1 right-1 bg-black/80 hover:bg-rose-600 text-white p-1 rounded-full transition-colors cursor-pointer"
                   >
                     <Trash2 className="w-3 h-3" />
@@ -230,7 +477,7 @@ _Hola, envío mis datos para una valoración personalizada de mi auto en José Z
                 </span>
               </div>
               <div className="text-[11px] text-neutral-400 mt-1">
-                {lang === 'es' ? 'Presupuesto sin compromiso • Incluye garantía por escrito' : 'No obligation quote • Includes written warranty'}
+                {lang === 'es' ? 'Presupuesto sin compromiso • Incluye garantía por escrito • Precio final sujeto a revisión física del vehículo' : 'No obligation quote • Includes written warranty • Final price subject to physical inspection of the vehicle'}
               </div>
             </div>
 
@@ -239,11 +486,22 @@ _Hola, envío mis datos para una valoración personalizada de mi auto en José Z
               <button
                 type="button"
                 onClick={handleSendWhatsApp}
-                className="action-pill action-green"
+                disabled={sending || Boolean(sent)}
+                className="action-pill action-green disabled:opacity-60 disabled:cursor-wait"
               >
                 <MessageCircle className="w-4 h-4 fill-neutral-950" />
-                <span>{lang === 'es' ? 'Enviar por WhatsApp' : 'Send via WhatsApp'}</span>
+                <span>
+                  {sending
+                    ? (lang === 'es' ? 'Guardando…' : 'Saving…')
+                    : (lang === 'es' ? 'Enviar por WhatsApp' : 'Send via WhatsApp')}
+                </span>
               </button>
+              {saveWarning && !sent && (
+                <div className="flex items-start gap-2 rounded-xl border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-[11px] text-amber-200">
+                  <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
+                  <span>{saveWarning}</span>
+                </div>
+              )}
             </div>
           </div>
 

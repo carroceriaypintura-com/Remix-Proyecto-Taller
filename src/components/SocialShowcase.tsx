@@ -26,9 +26,9 @@ interface SocialShowcaseProps {
   lang: Language;
 }
 
-const FB_REEL_URL = 'https://www.facebook.com/reel/1083577567886919/';
+const FB_REEL_URL = 'https://www.facebook.com/reel/1688768546243139/';
 const FB_REEL_IFRAME_SRC =
-  'https://www.facebook.com/plugins/video.php?height=476&href=https%3A%2F%2Fwww.facebook.com%2Freel%2F1083577567886919%2F&show_text=true&width=267&t=0';
+  'https://www.facebook.com/plugins/video.php?height=476&href=https%3A%2F%2Fwww.facebook.com%2Freel%2F1688768546243139%2F&show_text=true&width=267&t=0';
 
 const FB_POST_URL =
   'https://www.facebook.com/carroceriaypintura.g/posts/pfbid0faUof5oWSX15UuwhQvLkod2td7CvTjhsekY4ss3geFg4YrZEjiQFxshchbS8KBBYl';

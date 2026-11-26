@@ -13,11 +13,25 @@ import SocialShowcase from './components/SocialShowcase';
 import QuoteEstimator from './components/QuoteEstimator';
 import LocationContact from './components/LocationContact';
 import Footer from './components/Footer';
-import { BACKGROUND_VIDEO, BUSINESS_INFO } from './data/content';
+import { BACKGROUND_VIDEO, BACKGROUND_POSTER, BUSINESS_INFO } from './data/content';
+import { trackWhatsAppClick } from './lib/analytics';
 
 export default function App() {
   const [lang, setLang] = useState<Language>('es');
   const bgVideoRef = useRef<HTMLVideoElement>(null);
+  // En el celular no se descarga el video de fondo (15 MB): se muestra
+  // una foto fija. En computadora sí se reproduce el video.
+  const [isMobileBackground, setIsMobileBackground] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia('(max-width: 767px)').matches
+  );
+
+  useEffect(() => {
+    const query = window.matchMedia('(max-width: 767px)');
+    const onChange = () => setIsMobileBackground(query.matches);
+    onChange();
+    query.addEventListener('change', onChange);
+    return () => query.removeEventListener('change', onChange);
+  }, []);
 
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -31,18 +45,28 @@ export default function App() {
 
   return (
     <div className="min-h-screen text-neutral-100 flex flex-col selection:bg-emerald-500 selection:text-neutral-950 scroll-smooth font-['Plus_Jakarta_Sans',sans-serif] relative">
-      {/* Video de fondo: carros del taller, en bucle y sin audio. */}
-      <video
-        ref={bgVideoRef}
-        className="fixed inset-0 -z-10 h-full w-full object-cover"
-        src={BACKGROUND_VIDEO}
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="auto"
-        aria-hidden="true"
-      />
+      {/* Video de fondo: carros del taller, en bucle y sin audio. En el
+          celular se muestra una foto fija para no descargar el video. */}
+      {isMobileBackground ? (
+        <div
+          aria-hidden="true"
+          className="fixed inset-0 -z-10 h-full w-full bg-cover bg-center"
+          style={{ backgroundImage: `url(${BACKGROUND_POSTER})` }}
+        />
+      ) : (
+        <video
+          ref={bgVideoRef}
+          className="fixed inset-0 -z-10 h-full w-full object-cover"
+          src={BACKGROUND_VIDEO}
+          poster={BACKGROUND_POSTER}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          aria-hidden="true"
+        />
+      )}
       <div aria-hidden="true" className="fixed inset-0 -z-10 bg-black/35" />
 
       {/* Header with brand identity and contact links. */}
@@ -91,6 +115,7 @@ export default function App() {
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Contactar por WhatsApp"
+          onClick={() => trackWhatsAppClick('flotante')}
           className="flex items-center gap-2 px-5 py-3 rounded-full bg-emerald-500 hover:bg-emerald-400 text-black font-bold text-xs sm:text-sm shadow-[0_0_20px_rgba(16,185,129,0.35)] transition-all hover:scale-105 cursor-pointer"
         >
           <MessageCircle className="w-4 h-4 fill-black" />
