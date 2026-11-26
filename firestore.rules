@@ -92,5 +92,29 @@ service cloud.firestore {
                       isValidWhatsappMessage(request.resource.data);
       allow delete: if isAdmin();
     }
+
+    // Fotos de la galería agregadas desde el panel de administración.
+    // Lectura pública (el sitio las muestra en la galería); solo el
+    // admin puede crear, modificar o borrar.
+    match /gallery_photos/{photoId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+
+    // Videos del taller agregados desde el panel de administración.
+    // Lectura pública (el sitio los muestra en la sección de videos);
+    // solo el admin puede crear, modificar o borrar.
+    match /workshop_videos/{videoId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+
+    // Contenido editable del sitio (servicios, precios y horario).
+    // Un solo documento: site_content/general. Lectura pública (el sitio
+    // lee los valores editados); solo el admin puede escribir.
+    match /site_content/{docId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
   }
 }

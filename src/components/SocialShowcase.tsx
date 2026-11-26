@@ -31,9 +31,9 @@ const FB_REEL_IFRAME_SRC =
   'https://www.facebook.com/plugins/video.php?height=476&href=https%3A%2F%2Fwww.facebook.com%2Freel%2F1083577567886919%2F&show_text=true&width=267&t=0';
 
 const FB_POST_URL =
-  'https://www.facebook.com/AutoDetalladoGenesis/posts/pfbid0faUof5oWSX15UuwhQvLkod2td7CvTjhsekY4ss3geFg4YrZEjiQFxshchbS8KBBYl';
+  'https://www.facebook.com/carroceriaypintura.g/posts/pfbid0faUof5oWSX15UuwhQvLkod2td7CvTjhsekY4ss3geFg4YrZEjiQFxshchbS8KBBYl';
 const FB_POST_IFRAME_SRC =
-  'https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2FAutoDetalladoGenesis%2Fposts%2Fpfbid0faUof5oWSX15UuwhQvLkod2td7CvTjhsekY4ss3geFg4YrZEjiQFxshchbS8KBBYl&show_text=true&width=500';
+  'https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fcarroceriaypintura.g%2Fposts%2Fpfbid0faUof5oWSX15UuwhQvLkod2td7CvTjhsekY4ss3geFg4YrZEjiQFxshchbS8KBBYl&show_text=true&width=500';
 
 type MediaType = 'feed' | 'reel' | 'post';
 type PlatformFilter = 'all' | 'workshop' | 'facebook' | 'instagram';
@@ -116,12 +116,12 @@ export default function SocialShowcase({ lang }: SocialShowcaseProps) {
     if (!newImageUrl.trim()) return;
 
     const channelName =
-      newPlatform === 'facebook' ? 'Auto Detallado Genesis' : '@carroceria_pintura_genesis';
+      newPlatform === 'facebook' ? 'Taller de Carrocería y Pintura' : '@carroceriaypintura_';
     const channelUrl =
       newPostUrl.trim() ||
       (newPlatform === 'facebook'
-        ? 'https://www.facebook.com/AutoDetalladoGenesis'
-        : 'https://www.instagram.com/carroceria_pintura_genesis');
+        ? 'https://www.facebook.com/carroceriaypintura.g'
+        : 'https://www.instagram.com/carroceriaypintura_');
 
     const newPost: SocialPostItem = {
       id: `custom-${Date.now()}`,
@@ -133,7 +133,7 @@ export default function SocialShowcase({ lang }: SocialShowcaseProps) {
       titleEn: newTitle.trim() || 'New Social Photo',
       captionEs: newCaption.trim() || (lang === 'es' ? 'Publicación compartida de nuestras redes sociales.' : 'Shared post from our official channels.'),
       captionEn: newCaption.trim() || 'Shared post from our official channels.',
-      tag: newTag.trim() || (newPlatform === 'facebook' ? '#AutoDetalladoGenesis' : '#carroceria_pintura_genesis'),
+      tag: newTag.trim() || (newPlatform === 'facebook' ? '#carroceriaypintura' : '#carroceriaypintura_'),
       isUserAdded: true,
     };
 
@@ -185,8 +185,8 @@ export default function SocialShowcase({ lang }: SocialShowcaseProps) {
       tabPost: 'Publicación de Facebook',
       addBtn: 'Agregar Foto de Mis Redes',
       filterAll: 'Todas las Fotos',
-      filterFb: 'Facebook (@AutoDetalladoGenesis)',
-      filterIg: 'Instagram (@carroceria_pintura_genesis)',
+      filterFb: 'Facebook (@carroceriaypintura.g)',
+      filterIg: 'Instagram (@carroceriaypintura_)',
       quoteBtn: 'Cotizar Trabajo Similar por WhatsApp',
     },
     en: {
@@ -199,8 +199,8 @@ export default function SocialShowcase({ lang }: SocialShowcaseProps) {
       tabPost: 'Official Facebook Post',
       addBtn: 'Add Social Media Photo',
       filterAll: 'All Photos',
-      filterFb: 'Facebook (@AutoDetalladoGenesis)',
-      filterIg: 'Instagram (@carroceria_pintura_genesis)',
+      filterFb: 'Facebook (@carroceriaypintura.g)',
+      filterIg: 'Instagram (@carroceriaypintura_)',
       quoteBtn: 'Quote Similar Work via WhatsApp',
     },
   }[lang];
@@ -472,7 +472,7 @@ export default function SocialShowcase({ lang }: SocialShowcaseProps) {
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs shadow-md transition-all hover:scale-105"
               >
                 <Facebook className="w-4 h-4 fill-white" />
-                <span>Facebook: Auto Detallado Genesis</span>
+                <span>Facebook: Taller de Carrocería y Pintura</span>
               </a>
 
               <a
@@ -482,7 +482,7 @@ export default function SocialShowcase({ lang }: SocialShowcaseProps) {
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-amber-600 via-rose-600 to-purple-600 hover:opacity-90 text-white font-bold text-xs shadow-md transition-all hover:scale-105"
               >
                 <Instagram className="w-4 h-4" />
-                <span>Instagram: @carroceria_pintura_genesis</span>
+                <span>Instagram: @carroceriaypintura_</span>
               </a>
 
               <a
@@ -525,7 +525,7 @@ export default function SocialShowcase({ lang }: SocialShowcaseProps) {
                       frameBorder="0"
                       allowFullScreen={true}
                       allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-                      title="Auto Detallado Genesis Facebook Reel Video"
+                      title="Taller de Carrocería y Pintura Facebook Reel Video"
                       className="rounded-lg"
                     />
                   </div>
@@ -540,7 +540,7 @@ export default function SocialShowcase({ lang }: SocialShowcaseProps) {
                       frameBorder="0"
                       allowFullScreen={true}
                       allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-                      title="Auto Detallado Genesis Facebook Post"
+                      title="Taller de Carrocería y Pintura Facebook Post"
                       className="w-full max-w-full rounded-lg"
                     />
                   </div>
@@ -548,7 +548,7 @@ export default function SocialShowcase({ lang }: SocialShowcaseProps) {
 
                 {/* Direct Link Footnote */}
                 <div className="w-full pt-3 px-1 flex items-center justify-between text-[11px] text-neutral-400">
-                  <span className="truncate pr-2">Auto Detallado Genesis</span>
+                  <span className="truncate pr-2">Taller de Carrocería y Pintura</span>
                   <a
                     href={activeMedia === 'reel' ? FB_REEL_URL : FB_POST_URL}
                     target="_blank"
@@ -568,7 +568,7 @@ export default function SocialShowcase({ lang }: SocialShowcaseProps) {
                 <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-lg bg-amber-500/10 text-amber-400 text-xs font-semibold">
                   <Sparkles className="w-3.5 h-3.5 text-amber-500" />
                   <span>
-                    {activeMedia === 'reel' ? 'Video en Vivo' : 'Publicación Oficial'} • Auto Detallado Genesis
+                    {activeMedia === 'reel' ? 'Video en Vivo' : 'Publicación Oficial'} • Taller de Carrocería y Pintura
                   </span>
                 </div>
 
@@ -674,7 +674,7 @@ export default function SocialShowcase({ lang }: SocialShowcaseProps) {
                     }`}
                   >
                     <Facebook className="w-4 h-4" />
-                    <span>Facebook (@AutoDetalladoGenesis)</span>
+                    <span>Facebook (@carroceriaypintura.g)</span>
                   </button>
 
                   <button

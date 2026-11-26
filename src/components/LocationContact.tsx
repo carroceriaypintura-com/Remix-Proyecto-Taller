@@ -23,6 +23,7 @@ import {
 } from 'lucide-react';
 import { Language } from '../types';
 import { BUSINESS_INFO } from '../data/content';
+import { useSiteContent } from '../lib/siteContent';
 
 interface LocationContactProps {
   lang: Language;
@@ -105,6 +106,11 @@ export default function LocationContact({ lang }: LocationContactProps) {
   const [mapTypeId, setMapTypeId] = useState<'roadmap' | 'hybrid'>('roadmap');
   const [recenterCount, setRecenterCount] = useState(0);
   const [userOrigin, setUserOrigin] = useState('');
+  // Horario editado desde el panel de administración; si no hay nada
+  // guardado o la lectura falla, se usa el horario fijo.
+  const siteContent = useSiteContent();
+  const hoursWeekday = siteContent?.hoursWeekday || BUSINESS_INFO.hoursWeekday;
+  const hoursDetailing = siteContent?.hoursDetailing || BUSINESS_INFO.hoursDetailing;
 
   const handleLaunchDirections = (originParam?: string) => {
     const origin = originParam || userOrigin.trim();
@@ -438,10 +444,10 @@ export default function LocationContact({ lang }: LocationContactProps) {
                 <span>{lang === 'es' ? 'Horario de Atención' : 'Operating Hours'}</span>
               </div>
               <div className="text-sm font-bold text-white">
-                {BUSINESS_INFO.hoursWeekday}
+                {hoursWeekday}
               </div>
               <div className="text-xs text-neutral-400">
-                {BUSINESS_INFO.hoursDetailing}
+                {hoursDetailing}
               </div>
             </div>
 

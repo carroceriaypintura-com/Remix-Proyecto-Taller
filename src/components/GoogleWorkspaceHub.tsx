@@ -17,6 +17,7 @@ import {
   Car,
   Clock,
   Sparkles,
+  Wrench,
   User as UserIcon,
 } from 'lucide-react';
 import { User } from 'firebase/auth';
@@ -55,13 +56,14 @@ import {
   updateWhatsappMessageStatus,
   StoredWhatsappMessage,
 } from '../lib/firebase';
+import AdminTools from './AdminTools';
 
 interface GoogleWorkspaceHubProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-type TabType = 'forms' | 'gmail' | 'tasks' | 'firestore';
+type TabType = 'forms' | 'gmail' | 'tasks' | 'firestore' | 'tools';
 
 export default function GoogleWorkspaceHub({ isOpen, onClose }: GoogleWorkspaceHubProps) {
   const [activeTab, setActiveTab] = useState<TabType>('forms');
@@ -406,7 +408,7 @@ export default function GoogleWorkspaceHub({ isOpen, onClose }: GoogleWorkspaceH
                 </span>
               </div>
               <p className="text-xs text-neutral-400">
-                Formularios de inspección, correos Gmail, tareas del taller y cotizaciones
+                Formularios de inspección, correos Gmail, tareas del taller, cotizaciones y herramientas del sitio
               </p>
             </div>
           </div>
@@ -502,6 +504,18 @@ export default function GoogleWorkspaceHub({ isOpen, onClose }: GoogleWorkspaceH
                 {quotes.length}
               </span>
             )}
+          </button>
+
+          <button
+            onClick={() => setActiveTab('tools')}
+            className={`py-3 sm:py-3.5 px-3 rounded-t-lg text-xs font-bold flex items-center gap-2 border-b-2 transition-all shrink-0 cursor-pointer ${
+              activeTab === 'tools'
+                ? 'border-emerald-500 text-emerald-300 bg-emerald-500/10'
+                : 'border-transparent text-neutral-400 hover:text-white'
+            }`}
+          >
+            <Wrench className="w-4 h-4 text-emerald-400" />
+            <span>Herramientas del sitio</span>
           </button>
         </div>
 
@@ -1186,6 +1200,11 @@ export default function GoogleWorkspaceHub({ isOpen, onClose }: GoogleWorkspaceH
                 </div>
               )}
             </div>
+          )}
+
+          {/* TAB 5: HERRAMIENTAS DEL SITIO (solo administrador) */}
+          {activeTab === 'tools' && (
+            <AdminTools user={user} notify={showNotification} />
           )}
 
         </div>

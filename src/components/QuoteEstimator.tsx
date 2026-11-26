@@ -1,14 +1,15 @@
-import { useState, useId } from 'react';
+import { useState, useId, useEffect } from 'react';
 import { Wrench, Upload, Trash2, MessageCircle, Sparkles, Check, AlertTriangle, RotateCcw } from 'lucide-react';
 import { Language } from '../types';
 import { BUSINESS_INFO } from '../data/content';
 import { trackLead } from '../lib/analytics';
+import { subscribeToSiteContent, findServiceOverride, SiteContentOverride } from '../lib/siteContent';
 
 interface QuoteEstimatorProps {
   lang: Language;
 }
 
-const COMMON_SERVICES = [
+export const COMMON_SERVICES = [
   { id: 'facia', nameEs: 'Fascia / Defensa', nameEn: 'Bumper Repair & Paint', minMxn: 1800, maxMxn: 2600, badge: 'Popular' },
   { id: 'salpicadera', nameEs: 'Salpicadera / Puerta', nameEn: 'Fender / Door Repair', minMxn: 1700, maxMxn: 2400 },
   { id: 'cofre', nameEs: 'Cofre / Cajuela', nameEn: 'Hood / Trunk Panel', minMxn: 2200, maxMxn: 3200 },
@@ -82,7 +83,21 @@ export default function QuoteEstimator({ lang }: QuoteEstimatorProps) {
   const [saveWarning, setSaveWarning] = useState<string | null>(null);
   const [popupBlocked, setPopupBlocked] = useState(false);
   const [sent, setSent] = useState<SentQuote | null>(null);
-  const activeService = COMMON_SERVICES.find((s) => s.id === selectedService) || COMMON_SERVICES[0];
+  // Precios editados desde el panel de administración (site_content/general).
+  // Si no hay nada guardado o la lectura falla, se usan los precios fijos.
+  const [contentOverride, setContentOverride] = useState<SiteContentOverride | null>(null);
+  useEffect(() => subscribeToSiteContent(setContentOverride), []);
+  const services = COMMON_SERVICES.map((s) => {
+    const o = findServiceOverride(contentOverride?.services, s.id);
+    if (!o) return s;
+    return {
+      ...s,
+      nameEs: o.title ?? s.nameEs,
+      minMxn: o.minMxn ?? s.minMxn,
+      maxMxn: o.maxMxn ?? s.maxMxn,
+    };
+  });
+  const activeService = services.find((s) => s.id === selectedService) || services[0];
   const usdMin = Math.round(activeService.minMxn / 18.5);
   const usdMax = Math.round(activeService.maxMxn / 18.5);
 
@@ -323,7 +338,7 @@ _Hola, envío mis datos para una valoración personalizada de mi auto en José Z
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-              {COMMON_SERVICES.map((s) => {
+              {services.map((s) => {
                 const isSelected = selectedService === s.id;
                 return (
                   <button

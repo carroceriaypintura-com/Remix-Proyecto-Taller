@@ -1,8 +1,13 @@
 import { Wrench, Images, MapPin, Calculator, Navigation, Phone, MessageCircle, Clock } from 'lucide-react';
 import { BUSINESS_INFO, FEATURED_WORK_PHOTO } from '../data/content';
 import { trackWhatsAppClick } from '../lib/analytics';
+import { useSiteContent } from '../lib/siteContent';
 
 export default function FlagshipHomepage() {
+  // Horario editado desde el panel de administración; si no hay nada
+  // guardado o la lectura falla, se usa el horario fijo.
+  const siteContent = useSiteContent();
+  const hoursWeekday = siteContent?.hoursWeekday || BUSINESS_INFO.hoursWeekday;
   return (
     <div className="bg-carbon-weave-glass">
       <section aria-labelledby="home-title" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 grid lg:grid-cols-2 gap-6 items-center">
@@ -24,7 +29,7 @@ export default function FlagshipHomepage() {
           <div className="space-y-3">
             <h2 id="location-title" className="text-xl sm:text-2xl font-bold flex items-center gap-2"><MapPin className="text-rose-400" aria-hidden="true" />Visítanos en Nogales</h2>
             <address className="not-italic text-sm text-neutral-300">{BUSINESS_INFO.address}<br />{BUSINESS_INFO.city}</address>
-            <p className="text-xs text-neutral-400 flex items-center gap-2"><Clock className="w-4 h-4 shrink-0" aria-hidden="true" />{BUSINESS_INFO.hoursWeekday}</p>
+            <p className="text-xs text-neutral-400 flex items-center gap-2"><Clock className="w-4 h-4 shrink-0" aria-hidden="true" />{hoursWeekday}</p>
             <div className="flex flex-wrap gap-2">
               <a href={BUSINESS_INFO.googleMapsUrl} target="_blank" rel="noopener noreferrer" className="action-pill action-rose"><Navigation aria-hidden="true" />Cómo llegar</a>
               <a href={`tel:${BUSINESS_INFO.phoneCall}`} className="action-pill action-blue"><Phone aria-hidden="true" />Llamar</a>

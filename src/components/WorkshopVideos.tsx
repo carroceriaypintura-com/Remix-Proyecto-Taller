@@ -1,8 +1,25 @@
+import { useEffect, useState } from 'react';
 import { Play } from 'lucide-react';
 import { Language } from '../types';
 import { WORKSHOP_VIDEOS } from '../data/content';
+import { subscribeToWorkshopVideos, AdminWorkshopVideo } from '../lib/siteContent';
 
 export default function WorkshopVideos({ lang }: { lang: Language }) {
+  // Videos agregados por el admin desde el panel (colección workshop_videos).
+  // Si la lectura falla o no hay nada, se muestran solo los videos fijos.
+  const [adminVideos, setAdminVideos] = useState<AdminWorkshopVideo[]>([]);
+  useEffect(() => subscribeToWorkshopVideos(setAdminVideos), []);
+  const videos = [
+    ...adminVideos.map((v) => ({
+      id: `admin-${v.id}`,
+      src: v.url,
+      title: v.title || 'Video del taller',
+      titleEn: v.title || 'Workshop video',
+      desc: '',
+      descEn: '',
+    })),
+    ...WORKSHOP_VIDEOS,
+  ];
   return (
     <section id="videos" className="py-8 sm:py-12 border-b border-white/10 bg-[#10131c]/80">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -20,7 +37,7 @@ export default function WorkshopVideos({ lang }: { lang: Language }) {
           </div>
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4">
-          {WORKSHOP_VIDEOS.map((item) => (
+          {videos.map((item) => (
             <figure key={item.id} className="overflow-hidden rounded-xl border border-white/15 bg-black text-left">
               <video
                 src={item.src}
