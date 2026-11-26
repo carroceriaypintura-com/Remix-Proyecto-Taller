@@ -1,8 +1,10 @@
+import { useEffect, useState } from 'react';
 import { ArrowRight, MessageCircle, ChevronDown, Wrench, Flame, Sparkles, Shield, Car, Check, Clock, ShieldCheck } from 'lucide-react';
 import { Language } from '../types';
 import { SERVICES_LIST, BUSINESS_INFO } from '../data/content';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 import { trackWhatsAppClick } from '../lib/analytics';
+import { subscribeToSiteContent, findServiceOverride, SiteContentOverride } from '../lib/siteContent';
 
 interface ServicesGridProps {
   lang: Language;
@@ -11,6 +13,20 @@ interface ServicesGridProps {
 export default function ServicesGrid({ lang }: ServicesGridProps) {
   const colors = ['action-amber', 'action-rose', 'action-purple', 'action-blue', 'action-green', 'action-amber'];
   const icons = [Wrench, Flame, Sparkles, Shield, Car, Check];
+  // Servicios editados desde el panel de administración (site_content/general).
+  // Si no hay nada guardado o la lectura falla, se usan los servicios fijos.
+  const [contentOverride, setContentOverride] = useState<SiteContentOverride | null>(null);
+  useEffect(() => subscribeToSiteContent(setContentOverride), []);
+  const services = SERVICES_LIST.map((srv) => {
+    const o = findServiceOverride(contentOverride?.services, srv.number);
+    if (!o) return srv;
+    return {
+      ...srv,
+      title: o.title ?? srv.title,
+      desc: o.desc ?? srv.desc,
+      time: o.time ?? srv.time,
+    };
+  });
   const { ref: headerRef, isVisible: headerVisible } = useScrollReveal();
   const { ref: gridRef, isVisible: gridVisible } = useScrollReveal({ threshold: 0.1 });
 
@@ -49,7 +65,7 @@ export default function ServicesGrid({ lang }: ServicesGridProps) {
           ref={gridRef}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-3"
         >
-          {SERVICES_LIST.map((srv, idx) => {
+          {services.map((srv, idx) => {
             const IconComponent = icons[idx % icons.length];
             const cleanNumber = parseInt(srv.number, 10) || idx + 1;
             const delayClass = getStaggerDelay(idx);

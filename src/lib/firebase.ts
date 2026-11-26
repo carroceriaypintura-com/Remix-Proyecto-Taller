@@ -308,3 +308,162 @@ export function subscribeToReviews(onData: (reviews: StoredReview[]) => void, on
     }
   );
 }
+
+// ---- Herramientas del administrador (/administracion) ----
+// Fotos y videos de la galería y el contenido editable del sitio
+// (servicios, precios y horario) viven en colecciones propias. Solo el
+// admin puede escribir; la lectura es pública porque el sitio las
+// muestra. Las reglas de Firestore son el límite real de seguridad;
+// requireAdministrator() es solo una comprobación previa en la interfaz.
+// Mientras las reglas nuevas no estén publicadas en la consola de
+// Firebase, estas escrituras fallan con permiso denegado.
+
+export interface ServiceOverride {
+  // Id del servicio al que aplica: el número de SERVICES_LIST ('01'..'06')
+  // o el id de COMMON_SERVICES del cotizador ('facia', 'pulido', ...).
+  id: string;
+  // Nombre del servicio (título en la cuadrícula, nombre en el cotizador).
+  title?: string;
+  // Descripción del servicio (solo servicios del sitio).
+  desc?: string;
+  // Duración del servicio, por ejemplo "2 - 5 días" (solo sitio).
+  time?: string;
+  // Rango de precios en MXN (solo cotizador).
+  minMxn?: number;
+  maxMxn?: number;
+}
+
+export interface SiteContentOverride {
+  services?: ServiceOverride[];
+  hoursWeekday?: string;
+  hoursDetailing?: string;
+  updatedAt?: any;
+}
+
+export interface StoredGalleryPhoto {
+  id: string;
+  imageData: string;
+  title: string;
+  createdAt: any;
+  createdBy?: string;
+}
+
+export async function saveGalleryPhoto(imageData: string, title: string): Promise<string> {
+  const user = await requireAdministrator();
+  const photoId = 'gal-' + Date.now().toString(36) + '-' + Math.random().toString(36).substring(2, 6);
+  const path = `gallery_photos/${photoId}`;
+  try {
+    await setDoc(doc(db, 'gallery_photos', photoId), {
+      id: photoId,
+      imageData,
+      title,
+      createdAt: serverTimestamp(),
+      createdBy: user.email ?? user.uid,
+    });
+    return photoId;
+  } catch (error) {
+    handleFirestoreError(error, OperationType.CREATE, path);
+  }
+}
+
+export async function deleteGalleryPhoto(photoId: string) {
+  await requireAdministrator();
+  const path = `gallery_photos/${photoId}`;
+  try {
+    await deleteDoc(doc(db, 'gallery_photos', photoId));
+  } catch (error) {
+    handleFirestoreError(error, OperationType.DELETE, path);
+  }
+}
+
+export function subscribeToGalleryPhotosAdmin(onData: (photos: StoredGalleryPhoto[]) => void, onError?: (err: Error) => void) {
+  let disposed = false;
+  let unsubscribe = () => {};
+  requireAdministrator().then(() => {
+    if (disposed) return;
+    unsubscribe = onSnapshot(
+      query(collection(db, 'gallery_photos'), orderBy('createdAt', 'desc')),
+      snapshot => onData(snapshot.docs.map(item => item.data() as StoredGalleryPhoto)),
+      error => onError?.(error)
+    );
+  }).catch(error => { if (!disposed) { onData([]); onError?.(error); } });
+  return () => { disposed = true; unsubscribe(); };
+}
+
+export interface StoredWorkshopVideo {
+  id: string;
+  url: string;
+  title: string;
+  createdAt: any;
+  createdBy?: string;
+}
+
+export async function saveWorkshopVideo(url: string, title: string): Promise<string> {
+  const user = await requireAdministrator();
+  const videoId = 'vid-' + Date.now().toString(36) + '-' + Math.random().toString(36).substring(2, 6);
+  const path = `workshop_videos/${videoId}`;
+  try {
+    await setDoc(doc(db, 'workshop_videos', videoId), {
+      id: videoId,
+      url,
+      title,
+      createdAt: serverTimestamp(),
+      createdBy: user.email ?? user.uid,
+    });
+    return videoId;
+  } catch (error) {
+    handleFirestoreError(error, OperationType.CREATE, path);
+  }
+}
+
+export async function deleteWorkshopVideo(videoId: string) {
+  await requireAdministrator();
+  const path = `workshop_videos/${videoId}`;
+  try {
+    await deleteDoc(doc(db, 'workshop_videos', videoId));
+  } catch (error) {
+    handleFirestoreError(error, OperationType.DELETE, path);
+  }
+}
+
+export function subscribeToWorkshopVideosAdmin(onData: (videos: StoredWorkshopVideo[]) => void, onError?: (err: Error) => void) {
+  let disposed = false;
+  let unsubscribe = () => {};
+  requireAdministrator().then(() => {
+    if (disposed) return;
+    unsubscribe = onSnapshot(
+      query(collection(db, 'workshop_videos'), orderBy('createdAt', 'desc')),
+      snapshot => onData(snapshot.docs.map(item => item.data() as StoredWorkshopVideo)),
+      error => onError?.(error)
+    );
+  }).catch(error => { if (!disposed) { onData([]); onError?.(error); } });
+  return () => { disposed = true; unsubscribe(); };
+}
+
+// Guarda el contenido editable del sitio (servicios, precios y horario)
+// en un solo documento: site_content/general. Solo se guardan los valores
+// que difieren de los fijos de content.ts.
+export async function saveSiteContent(data: Omit<SiteContentOverride, 'updatedAt'>): Promise<void> {
+  await requireAdministrator();
+  const path = 'site_content/general';
+  try {
+    await setDoc(doc(db, 'site_content', 'general'), {
+      ...data,
+      updatedAt: serverTimestamp(),
+    });
+  } catch (error) {
+    handleFirestoreError(error, OperationType.WRITE, path);
+  }
+}
+
+// Borra el documento de contenido editable: el sitio vuelve a mostrar
+// los valores fijos de content.ts.
+export async function deleteSiteContent(): Promise<void> {
+  await requireAdministrator();
+  const path = 'site_content/general';
+  try {
+    await deleteDoc(doc(db, 'site_content', 'general'));
+  } catch (error) {
+    handleFirestoreError(error, OperationType.DELETE, path);
+  }
+}
