@@ -5,6 +5,7 @@ import { Language } from '../types';
 import {
   StoredReview,
   addReview,
+  consumeRedirectResult,
   loginWithFacebook,
   loginWithGoogle,
   logoutUser,
@@ -22,6 +23,10 @@ function friendlyAuthError(err: unknown): string {
     return 'Este dominio aún no está autorizado para entrar, prueba desde el sitio en vivo.';
   if (code === 'auth/popup-blocked')
     return 'El navegador bloqueó la ventana, permite las ventanas emergentes e inténtalo de nuevo.';
+  if (code === 'auth/redirect-cancelled-by-user')
+    return 'Se canceló el inicio de sesión, inténtalo de nuevo.';
+  if (code === 'auth/web-storage-unsupported')
+    return 'El navegador no permite guardar la sesión, prueba desde Chrome.';
   return 'No se pudo iniciar sesión, inténtalo de nuevo.';
 }
 
@@ -69,6 +74,11 @@ export default function ReviewsSection({ lang }: { lang: Language }) {
   const [sent, setSent] = useState(false);
 
   useEffect(() => {
+    // Al volver de Google/Facebook por redirección, aquí se recoge el
+    // resultado (o el error, que se muestra bajo los botones).
+    consumeRedirectResult().catch((err) => {
+      setLoginError(friendlyAuthError(err));
+    });
     const unsubscribeAuth = onAuthChange((currentUser) => {
       setUser(currentUser);
       if (currentUser?.displayName) {
@@ -86,11 +96,10 @@ export default function ReviewsSection({ lang }: { lang: Language }) {
     setLoginError('');
     setLoggingIn(true);
     try {
-      const loggedUser =
-        provider === 'facebook' ? await loginWithFacebook() : await loginWithGoogle();
-      if (loggedUser.displayName) {
-        setAuthorName((prev) => prev || loggedUser.displayName || '');
-      }
+      // El inicio es por redirección: la página sale hacia Google/Facebook
+      // y vuelve ya con la sesión; el usuario se recoge con onAuthChange.
+      if (provider === 'facebook') await loginWithFacebook();
+      else await loginWithGoogle();
     } catch (err) {
       setLoginError(friendlyAuthError(err));
     } finally {

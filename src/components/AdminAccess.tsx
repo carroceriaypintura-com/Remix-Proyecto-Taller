@@ -1,6 +1,6 @@
 import { lazy, Suspense, useEffect, useState } from 'react';
 import { onIdTokenChanged } from 'firebase/auth';
-import { auth, loginWithGoogle, logoutUser, requireAdministrator } from '../lib/firebase';
+import { auth, consumeRedirectResult, loginWithGoogle, logoutUser, requireAdministrator } from '../lib/firebase';
 
 const GoogleWorkspaceHub = lazy(() => import('./GoogleWorkspaceHub'));
 
@@ -13,6 +13,10 @@ export default function AdminAccess() {
     robots.name = 'robots';
     robots.content = 'noindex, nofollow';
     document.head.appendChild(robots);
+    // Si se vuelve de Google por redirección, aquí se recoge el error.
+    consumeRedirectResult().catch(() => {
+      setError('No se pudo iniciar sesión. Intenta nuevamente.');
+    });
     let generation = 0;
     const stop = onIdTokenChanged(auth, async user => {
       const current = ++generation;
