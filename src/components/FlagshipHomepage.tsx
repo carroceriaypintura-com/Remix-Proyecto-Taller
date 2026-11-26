@@ -10,12 +10,12 @@ export default function FlagshipHomepage() {
   const hoursWeekday = siteContent?.hoursWeekday || BUSINESS_INFO.hoursWeekday;
   return (
     <div className="bg-carbon-weave-glass">
-      <section aria-labelledby="home-title" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 grid lg:grid-cols-2 gap-6 items-center">
+      <section aria-labelledby="home-title" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-10 grid lg:grid-cols-2 gap-5 sm:gap-6 items-center">
         <div className="space-y-4">
           <p className="text-xs font-semibold tracking-widest text-amber-300 uppercase">Carrocería · Pintura · Detallado</p>
-          <h1 id="home-title" className="font-serif-luxury text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight">Brillo que se nota.<br />Trabajo que responde.</h1>
+          <h1 id="home-title" className="font-serif-luxury text-[30px] leading-tight sm:text-5xl lg:text-6xl font-bold">Brillo que se nota.<br />Trabajo que responde.</h1>
           <p className="text-sm text-neutral-300">Tu taller en Los Encinos, Nogales.</p>
-          <a href={`${BUSINESS_INFO.social.whatsapp}?text=${encodeURIComponent('Hola, me gustaría cotizar una reparación para mi auto.')}`} target="_blank" rel="noopener noreferrer" onClick={() => trackWhatsAppClick('heroe')} className="action-pill action-green">
+          <a href={`${BUSINESS_INFO.social.whatsapp}?text=${encodeURIComponent('Hola, me gustaría cotizar una reparación para mi auto.')}`} target="_blank" rel="noopener noreferrer" onClick={() => trackWhatsAppClick('heroe')} className="action-pill action-green w-full sm:w-auto justify-center">
             <MessageCircle aria-hidden="true" />Cotiza por WhatsApp
           </a>
         </div>
