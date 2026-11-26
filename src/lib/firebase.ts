@@ -3,7 +3,8 @@ import {
   getAuth,
   FacebookAuthProvider,
   GoogleAuthProvider,
-  signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
   signOut,
   onAuthStateChanged,
   User,
@@ -145,10 +146,11 @@ export interface StoredWhatsappMessage {
 }
 
 // Google Auth Helpers
-export async function loginWithGoogle(): Promise<User> {
+// El inicio es por redirección (no por ventana emergente): en el celular la
+// ventana emergente se quedaba en blanco y se cerraba sola sin dejar entrar.
+export async function loginWithGoogle(): Promise<void> {
   try {
-    const result = await signInWithPopup(auth, googleProvider);
-    return result.user;
+    await signInWithRedirect(auth, googleProvider);
   } catch (err) {
     console.error('Google Sign In error:', err);
     throw err;
@@ -156,12 +158,24 @@ export async function loginWithGoogle(): Promise<User> {
 }
 
 // Facebook Auth Helpers (for public reviews; same Firebase project as Google login)
-export async function loginWithFacebook(): Promise<User> {
+export async function loginWithFacebook(): Promise<void> {
   try {
-    const result = await signInWithPopup(auth, facebookProvider);
-    return result.user;
+    await signInWithRedirect(auth, facebookProvider);
   } catch (err) {
     console.error('Facebook Sign In error:', err);
+    throw err;
+  }
+}
+
+// Lee el resultado del inicio por redirección cuando la página vuelve a
+// cargar. Si el inicio falló (por ejemplo, se canceló), lanza el error para
+// que la pantalla lo muestre. Si no hubo redirección, devuelve null.
+export async function consumeRedirectResult(): Promise<User | null> {
+  try {
+    const result = await getRedirectResult(auth);
+    return result?.user ?? null;
+  } catch (err) {
+    console.error('Redirect Sign In error:', err);
     throw err;
   }
 }
