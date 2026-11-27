@@ -213,7 +213,7 @@ export default function QuoteEstimator({ lang }: QuoteEstimatorProps) {
     }
 
     const photoLine =
-      photoCount > 0
+      photoCount > 0 && quoteId
         ? `\n*Fotos:* ${photoCount} foto(s) adjunta(s) en la solicitud web, visibles en el panel del taller.`
         : '';
     const text =
