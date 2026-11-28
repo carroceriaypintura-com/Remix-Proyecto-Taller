@@ -76,9 +76,9 @@ export default function App() {
         {/* Compact homepage: Jeep, location, navigation and photo album. */}
         <FlagshipHomepage />
 
+        <ServicesGrid lang={lang} />
         <RealGallery lang={lang} />
         <WorkshopVideos lang={lang} />
-        <ServicesGrid lang={lang} />
         <ReviewsSection lang={lang} />
         <div className="max-w-7xl mx-auto px-4 py-4">
           <details className="rounded-2xl border border-white/10 bg-[#10141d]/80">
