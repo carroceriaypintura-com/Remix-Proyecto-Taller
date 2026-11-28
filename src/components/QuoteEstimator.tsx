@@ -16,7 +16,7 @@ export const COMMON_SERVICES = [
   { id: 'pulido', nameEs: 'Pulido Espejo Genesis', nameEn: 'Mirror Polish Detailing', minMxn: 1500, maxMxn: 2800, badge: 'Genesis' },
   { id: 'ceramico', nameEs: 'Recubrimiento Cerámico 9H', nameEn: '9H Ceramic Coating', minMxn: 3500, maxMxn: 5500 },
   { id: 'faros', nameEs: 'Restauración de Faros (Par)', nameEn: 'Headlight Restoration', minMxn: 700, maxMxn: 1000 },
-  { id: 'general', nameEs: 'Pintura General al Horno', nameEn: 'Complete Oven Repaint', minMxn: 16000, maxMxn: 26000 },
+  { id: 'general', nameEs: 'Pintura General', nameEn: 'Complete Repaint', minMxn: 16000, maxMxn: 26000 },
   { id: 'chasis', nameEs: 'Hojalatería de Colisión', nameEn: 'Collision Bodywork', minMxn: 3000, maxMxn: 6500 },
 ];
 
