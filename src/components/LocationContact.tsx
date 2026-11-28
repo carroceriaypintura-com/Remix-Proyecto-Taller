@@ -162,9 +162,6 @@ export default function LocationContact({ lang }: LocationContactProps) {
                       {lang === 'es' ? 'Verificado en Maps' : 'Verified on Maps'}
                     </span>
                   </div>
-                  <div className="text-xs text-neutral-400">
-                    José Zazueta #16, Col. Los Encinos, Nogales, Son.
-                  </div>
                 </div>
               </div>
 
@@ -252,13 +249,6 @@ export default function LocationContact({ lang }: LocationContactProps) {
                           <div className="font-bold text-sm text-neutral-950 leading-snug mb-0.5">
                             Detallado Genesis & Hojalatería
                           </div>
-                          <div className="text-xs text-neutral-600 mb-2 leading-relaxed">
-                            José Zazueta #16, Col. Los Encinos, Nogales, Son.
-                          </div>
-                          <div className="text-[11px] text-neutral-700 bg-neutral-100 p-1.5 rounded mb-2.5 space-y-0.5">
-                            <div>🕒 Lun-Sáb: 8:00 AM - 6:00 PM</div>
-                            <div>📞 (631) 132-2616</div>
-                          </div>
                           <div className="flex items-center gap-2">
                             <a
                               href={BUSINESS_INFO.googleMapsUrl}
@@ -269,13 +259,6 @@ export default function LocationContact({ lang }: LocationContactProps) {
                               <ExternalLink className="w-3 h-3" />
                               <span>{lang === 'es' ? 'Ver en Maps' : 'View on Maps'}</span>
                             </a>
-                            <button
-                              onClick={() => handleLaunchDirections()}
-                              className="inline-flex items-center gap-1 px-2.5 py-1.5 bg-neutral-200 hover:bg-neutral-300 text-neutral-800 font-semibold rounded-lg text-xs transition-colors cursor-pointer"
-                            >
-                              <Navigation className="w-3 h-3" />
-                              <span>{lang === 'es' ? 'Cómo llegar' : 'Directions'}</span>
-                            </button>
                           </div>
                         </div>
                       </InfoWindow>
@@ -288,9 +271,6 @@ export default function LocationContact({ lang }: LocationContactProps) {
                   <AlertCircle className="w-10 h-10 text-amber-500 mb-3" />
                   <p className="text-white font-bold text-base mb-1">
                     Taller de Carrocería y Pintura
-                  </p>
-                  <p className="text-neutral-400 text-xs mb-3">
-                    José Zazueta #16, Col. Los Encinos, Nogales, Son.
                   </p>
                   <a
                     href={BUSINESS_INFO.googleMapsUrl}
