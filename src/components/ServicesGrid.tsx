@@ -78,7 +78,7 @@ export default function ServicesGrid({ lang }: ServicesGridProps) {
   };
 
   return (
-    <section id="servicios" className="py-10 sm:py-12 bg-[#0b0e13]/90 border-b border-white/5 relative overflow-hidden">
+    <section id="servicios" className="py-10 sm:py-12 glass-band border-b border-white/5 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div
           ref={headerRef}
@@ -113,6 +113,7 @@ export default function ServicesGrid({ lang }: ServicesGridProps) {
             onPointerDown={onPointerDown}
             onPointerMove={onPointerMove}
             onPointerUp={onPointerUp}
+            onPointerCancel={onPointerUp}
             role="region"
             aria-roledescription="carrusel"
             aria-label={lang === 'es' ? 'Servicios del taller' : 'Workshop services'}
@@ -189,7 +190,7 @@ export default function ServicesGrid({ lang }: ServicesGridProps) {
               type="button"
               onClick={prev}
               aria-label={lang === 'es' ? 'Servicio anterior' : 'Previous service'}
-              className="absolute left-1 sm:left-4 top-1/2 -translate-y-1/2 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-[#7fb3ff]/50 bg-[#2f7bff]/90 text-white shadow-lg transition hover:bg-[#2f7bff] cursor-pointer"
+              className="svc-arrow absolute left-1 sm:left-4 top-1/2 -translate-y-1/2 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-[#7fb3ff]/50 bg-[#2f7bff]/90 text-white shadow-lg transition hover:bg-[#2f7bff] cursor-pointer"
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
@@ -197,7 +198,7 @@ export default function ServicesGrid({ lang }: ServicesGridProps) {
               type="button"
               onClick={next}
               aria-label={lang === 'es' ? 'Servicio siguiente' : 'Next service'}
-              className="absolute right-1 sm:right-4 top-1/2 -translate-y-1/2 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-[#7fb3ff]/50 bg-[#2f7bff]/90 text-white shadow-lg transition hover:bg-[#2f7bff] cursor-pointer"
+              className="svc-arrow absolute right-1 sm:right-4 top-1/2 -translate-y-1/2 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-[#7fb3ff]/50 bg-[#2f7bff]/90 text-white shadow-lg transition hover:bg-[#2f7bff] cursor-pointer"
             >
               <ChevronRight className="w-5 h-5" />
             </button>

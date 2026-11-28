@@ -172,7 +172,7 @@ export default function ReviewsSection({ lang }: { lang: Language }) {
         </div>
 
         {reviews.length === 0 ? (
-          <p className="rounded-2xl border border-white/10 bg-[#10141d] p-5 text-sm text-neutral-300 mb-6">
+          <p className="rounded-2xl glass-panel p-5 text-sm text-neutral-300 mb-6">
             {lang === 'es'
               ? 'Aún no hay reseñas publicadas. Sé el primero en dejar la tuya.'
               : 'No reviews published yet. Be the first to leave yours.'}
@@ -184,7 +184,7 @@ export default function ReviewsSection({ lang }: { lang: Language }) {
               return (
                 <article
                   key={review.id}
-                  className="rounded-2xl border border-white/10 bg-[#10141d] p-4"
+                  className="rounded-2xl glass-panel p-4"
                 >
                   <Stars value={review.rating} size="sm" />
                   <p className="text-sm text-neutral-200 mt-2">{review.comment}</p>
@@ -199,7 +199,7 @@ export default function ReviewsSection({ lang }: { lang: Language }) {
           </div>
         )}
 
-        <div className="rounded-2xl border border-white/10 bg-[#10141d] p-5">
+        <div className="rounded-2xl glass-panel p-5">
           {!user ? (
             <div>
               <h3 className="font-bold text-lg">

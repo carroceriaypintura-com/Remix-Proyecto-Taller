@@ -253,7 +253,7 @@ _Hola, envío mis datos para una valoración personalizada de mi auto en José Z
   const inputErrorClass = 'border-rose-500/70';
 
   return (
-    <section id="cotizador" className="py-8 sm:py-12 bg-[#12141c]/80 border-b border-white/5 relative">
+    <section id="cotizador" className="py-8 sm:py-12 glass-band border-b border-white/5 relative">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
@@ -272,8 +272,8 @@ _Hola, envío mis datos para una valoración personalizada de mi auto en José Z
           </p>
         </div>
 
-        {/* Solid Slate Card #1a1d26 (No glassmorphism, rounded-2xl, soft shadow) */}
-        <div className="relative rounded-2xl bg-[#1a1d26] border border-white/5 p-4 sm:p-7 space-y-7 shadow-md">
+        {/* Tarjeta de cristal sobre el video de fondo */}
+        <div className="relative rounded-2xl glass-panel p-4 sm:p-7 space-y-7">
           
           {/* Confirmation after sending */}
           {sent && (

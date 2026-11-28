@@ -24,7 +24,7 @@ export default function FlagshipHomepage() {
         </figure>
       </section>
 
-      <section id="ubicacion" aria-labelledby="location-title" className="border-y border-white/10 bg-[#10141d]/80">
+      <section id="ubicacion" aria-labelledby="location-title" className="border-y border-white/10 glass-band">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 grid md:grid-cols-2 gap-5 items-center">
           <div className="space-y-3">
             <h2 id="location-title" className="text-xl sm:text-2xl font-bold flex items-center gap-2"><MapPin className="text-rose-400" aria-hidden="true" />Visítanos en Nogales</h2>
@@ -41,9 +41,9 @@ export default function FlagshipHomepage() {
 
       <nav aria-label="Secciones del taller" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
         <a href="#servicios" className="action-pill action-amber"><Wrench aria-hidden="true" />Servicios</a>
+        <a href="#cotizador" className="action-pill action-blue"><Calculator aria-hidden="true" />Cotizar</a>
         <a href="#galeria" className="action-pill action-purple"><Images aria-hidden="true" />Álbum</a>
         <a href="#ubicacion" className="action-pill action-rose"><MapPin aria-hidden="true" />Ubicación</a>
-        <a href="#cotizador" className="action-pill action-blue"><Calculator aria-hidden="true" />Cotizar</a>
       </nav>
     </div>
   );

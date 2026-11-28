@@ -50,7 +50,7 @@ export default function App() {
       {isMobileBackground ? (
         <div
           aria-hidden="true"
-          className="fixed inset-0 -z-10 h-full w-full bg-cover bg-center"
+          className="fixed inset-0 -z-10 h-full w-full bg-cover bg-center bg-mobile-pan"
           style={{ backgroundImage: `url(${BACKGROUND_POSTER})` }}
         />
       ) : (
@@ -67,7 +67,7 @@ export default function App() {
           aria-hidden="true"
         />
       )}
-      <div aria-hidden="true" className="fixed inset-0 -z-10 bg-black/35" />
+      <div aria-hidden="true" className="fixed inset-0 -z-10 bg-[linear-gradient(180deg,rgba(10,12,16,0.34),rgba(10,12,16,0.52))]" />
 
       {/* Header with brand identity and contact links. */}
       <Header />
@@ -81,14 +81,14 @@ export default function App() {
         <WorkshopVideos lang={lang} />
         <ReviewsSection lang={lang} />
         <div className="max-w-7xl mx-auto px-4 py-4">
-          <details className="rounded-2xl border border-white/10 bg-[#10141d]/80">
+          <details className="rounded-2xl glass-panel">
             <summary className="action-pill action-purple m-3 cursor-pointer"><Play aria-hidden="true" />Videos y opciones de redes</summary>
             <SocialShowcase lang={lang} />
           </details>
         </div>
         <QuoteEstimator lang={lang} />
         <div className="max-w-7xl mx-auto px-4 pb-8">
-          <details className="rounded-2xl border border-white/10 bg-[#10141d]/80">
+          <details className="rounded-2xl glass-panel">
             <summary className="action-pill action-rose m-3 cursor-pointer"><MapPin aria-hidden="true" />Más opciones de ubicación y contacto</summary>
             <LocationContact lang={lang} />
           </details>
