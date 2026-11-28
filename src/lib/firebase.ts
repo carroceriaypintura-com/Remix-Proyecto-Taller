@@ -333,7 +333,7 @@ export function subscribeToReviews(onData: (reviews: StoredReview[]) => void, on
 // Firebase, estas escrituras fallan con permiso denegado.
 
 export interface ServiceOverride {
-  // Id del servicio al que aplica: el número de SERVICES_LIST ('01'..'06')
+  // Id del servicio al que aplica: el número de SERVICES_LIST ('01'..'07')
   // o el id de COMMON_SERVICES del cotizador ('facia', 'pulido', ...).
   id: string;
   // Nombre del servicio (título en la cuadrícula, nombre en el cotizador).

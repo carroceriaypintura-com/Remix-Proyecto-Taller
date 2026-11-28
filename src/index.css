@@ -92,3 +92,13 @@ section[id] { scroll-margin-top: 160px; }
   html { scroll-behavior: auto; }
   *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
 }
+
+/* Cilindro 3D de servicios: efecto flotante suave dentro de cada tarjeta. */
+.svc-float {
+  animation: svc-float 3.4s ease-in-out infinite;
+}
+
+@keyframes svc-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
