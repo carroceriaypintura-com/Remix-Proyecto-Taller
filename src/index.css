@@ -23,7 +23,38 @@
 
 /* Capa oscura traslúcida y lisa (sin trama) para que el video de fondo se vea limpio. */
 .bg-carbon-weave-glass {
-  background-color: rgba(8, 10, 14, 0.55);
+  background-color: rgba(8, 10, 14, 0.30);
+  backdrop-filter: blur(14px) saturate(1.2);
+  -webkit-backdrop-filter: blur(14px) saturate(1.2);
+}
+
+/* Restyle transparente / cristal (acabado del cilindro): paneles
+   translúcidos sobre el video de fondo. No cambia colores ni letra. */
+.glass-panel {
+  background: linear-gradient(165deg, rgba(26, 29, 37, 0.44), rgba(15, 17, 22, 0.52));
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  backdrop-filter: blur(16px) saturate(1.25);
+  -webkit-backdrop-filter: blur(16px) saturate(1.25);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+.glass-band {
+  background: linear-gradient(180deg, rgba(26, 29, 37, 0.40), rgba(15, 17, 22, 0.48));
+  backdrop-filter: blur(14px) saturate(1.2);
+  -webkit-backdrop-filter: blur(14px) saturate(1.2);
+}
+
+/* Móvil: sin desbordamiento horizontal y texto legible sobre el video. */
+@media (max-width: 767px) {
+  body { overflow-x: clip; }
+  h1, h2 { text-shadow: 0 1px 12px rgba(0, 0, 0, 0.6); }
+  .svc-arrow { width: 44px !important; height: 44px !important; }
+}
+/* En el celular el fondo es la foto del video (no se descarga el video de
+   15 MB): zoom lento para que se sienta vivo sin pesar ni tapar el texto. */
+.bg-mobile-pan { animation: bg-pan 36s ease-in-out infinite alternate; will-change: transform; }
+@keyframes bg-pan {
+  from { transform: scale(1); }
+  to { transform: scale(1.07); }
 }
 
 .bg-carbon-card {

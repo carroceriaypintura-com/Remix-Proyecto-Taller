@@ -62,7 +62,7 @@ export default function RealGallery({ lang }: { lang: Language }) {
   }, [open]);
 
   return (
-    <section id="galeria" className="py-8 sm:py-12 border-b border-white/10 bg-[#10131c]/80">
+    <section id="galeria" className="py-8 sm:py-12 border-b border-white/10 glass-band">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
           <div>

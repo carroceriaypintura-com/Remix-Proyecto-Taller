@@ -122,7 +122,7 @@ export default function LocationContact({ lang }: LocationContactProps) {
   };
 
   return (
-    <section id="ubicacion-detalle" className="py-6 sm:py-10 bg-[#12141c] border-b border-white/5 relative">
+    <section id="ubicacion-detalle" className="py-6 sm:py-10 glass-band border-b border-white/5 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
@@ -145,7 +145,7 @@ export default function LocationContact({ lang }: LocationContactProps) {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           
           {/* Map Column (7 cols) - Solid Slate #1a1d26, rounded-2xl, soft shadow */}
-          <div className="lg:col-span-7 bg-[#1a1d26] border border-white/5 rounded-2xl p-3 sm:p-4 shadow-md space-y-3">
+          <div className="lg:col-span-7 glass-panel rounded-2xl p-3 sm:p-4 space-y-3">
             
             {/* Business Header Card above Map */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 rounded-xl bg-[#12141c] border border-white/5">
@@ -402,7 +402,7 @@ export default function LocationContact({ lang }: LocationContactProps) {
           <div className="lg:col-span-5 space-y-4">
             
             {/* Phone & WhatsApp Card */}
-            <div className="bg-[#1a1d26] border border-white/5 rounded-2xl p-6 sm:p-7 space-y-4 shadow-sm">
+            <div className="glass-panel rounded-2xl p-6 sm:p-7 space-y-4">
               <div className="text-xs font-bold text-amber-400 uppercase tracking-wider">
                 {lang === 'es' ? 'Teléfono y WhatsApp Directo' : 'Direct Phone & WhatsApp'}
               </div>
@@ -438,7 +438,7 @@ export default function LocationContact({ lang }: LocationContactProps) {
             </div>
 
             {/* Operating Hours */}
-            <div className="bg-[#1a1d26] border border-white/5 rounded-2xl p-6 sm:p-7 space-y-2 shadow-sm">
+            <div className="glass-panel rounded-2xl p-6 sm:p-7 space-y-2">
               <div className="flex items-center gap-2 text-xs font-bold text-neutral-300 uppercase tracking-wider">
                 <Clock className="w-4 h-4 text-amber-500" />
                 <span>{lang === 'es' ? 'Horario de Atención' : 'Operating Hours'}</span>
@@ -452,7 +452,7 @@ export default function LocationContact({ lang }: LocationContactProps) {
             </div>
 
             {/* Social Media Links */}
-            <div className="bg-[#1a1d26] border border-white/5 rounded-2xl p-6 sm:p-7 space-y-3.5 shadow-sm">
+            <div className="glass-panel rounded-2xl p-6 sm:p-7 space-y-3.5">
               <div className="text-xs font-bold text-neutral-300 uppercase tracking-wider">
                 {lang === 'es' ? 'Redes y Perfiles Oficiales' : 'Official Channels'}
               </div>

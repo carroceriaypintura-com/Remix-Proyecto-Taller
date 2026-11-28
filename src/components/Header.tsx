@@ -3,7 +3,7 @@ import { trackWhatsAppClick } from '../lib/analytics';
 
 export default function Header() {
   return (
-    <header className="sticky top-0 z-50 bg-[#080a0e]/95 backdrop-blur-md border-b border-white/10 transition-all shadow-lg">
+    <header className="sticky top-0 z-50 bg-[#080a0e]/60 backdrop-blur-md border-b border-white/10 transition-all shadow-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-h-20 py-2.5 sm:py-3 lg:py-0 lg:h-24 grid grid-cols-[minmax(0,1fr)_auto] lg:flex items-center justify-between gap-x-2 sm:gap-x-4 gap-y-2.5 sm:gap-y-3">
         
         {/* Left: Shield Logo + Typography */}
@@ -36,7 +36,7 @@ export default function Header() {
         {/* Contact and social links stay visible at every screen size. */}
         <nav
           aria-label="Contacto y redes sociales"
-          className="col-span-2 row-start-2 flex items-center gap-2 lg:gap-3 lg:ml-auto"
+          className="col-span-2 row-start-2 flex flex-wrap items-center gap-2 lg:gap-3 lg:ml-auto"
         >
           <a
             href={BUSINESS_INFO.social.whatsapp}
@@ -44,10 +44,10 @@ export default function Header() {
             rel="noopener noreferrer"
             aria-label="Contactar por WhatsApp"
             onClick={() => trackWhatsAppClick('encabezado')}
-            className="inline-flex flex-1 sm:flex-none min-h-11 items-center justify-center gap-1 sm:gap-2 px-1.5 sm:px-3.5 py-2.5 rounded-full text-[10px] sm:text-sm font-bold text-black bg-emerald-500 hover:bg-emerald-400 border border-emerald-300/30 transition-all shadow-[0_0_20px_rgba(16,185,129,0.25)] hover:scale-105"
+            className="inline-flex min-h-11 min-w-11 max-sm:w-11 max-sm:px-0 items-center justify-center gap-1 sm:gap-2 px-1.5 sm:px-3.5 py-2.5 rounded-full text-[10px] sm:text-sm font-semibold text-black bg-emerald-500 hover:bg-emerald-400 border border-emerald-300/30 transition-all shadow-md hover:scale-105"
           >
             <i className="fa-brands fa-whatsapp text-base" aria-hidden="true"></i>
-            <span>WhatsApp<span className="hidden xl:inline"> {BUSINESS_INFO.whatsappDisplay}</span></span>
+            <span className="sr-only">WhatsApp</span>
           </a>
 
           <a

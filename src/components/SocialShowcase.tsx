@@ -206,7 +206,7 @@ export default function SocialShowcase({ lang }: SocialShowcaseProps) {
   }[lang];
 
   return (
-    <section id="redes-sociales" className="py-16 sm:py-24 bg-[#12141c] border-b border-white/5 relative overflow-hidden">
+    <section id="redes-sociales" className="py-16 sm:py-24 glass-band border-b border-white/5 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
@@ -280,7 +280,7 @@ export default function SocialShowcase({ lang }: SocialShowcaseProps) {
           <div className="space-y-8">
             
             {/* Filter Bar (Facebook vs Instagram vs All) */}
-            <div className="flex flex-wrap items-center justify-between gap-3 bg-[#151822] p-3 rounded-2xl border border-white/5">
+            <div className="flex flex-wrap items-center justify-between gap-3 glass-panel p-3 rounded-2xl">
               <div className="flex items-center gap-2 flex-wrap">
                 <Filter className="w-3.5 h-3.5 text-neutral-400 ml-1" />
                 <span className="text-xs text-neutral-400 font-medium mr-1 hidden sm:inline">
